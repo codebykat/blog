@@ -30,6 +30,8 @@ talks were recorded by [confreaks](http://confreaks.net/); videos should
 be available [here](http://confreaks.net/events/rubyconf2011) sometime 
 soon.)
 
+<!--more-->
+
 ## Zach Holman: [How Github Uses Github to Build Github](http://rubyconf.org/presentations/62)
 
 Zach Holman's talk was mainly about Github's corporate culture and the 
@@ -134,9 +136,22 @@ but it was actually quite interesting (and funny; I swear Dr Nic is secretly
 a stand-up comedian).  His slides don't seem to be online, but I'll be sure
 to link the video once it's up.  Lots of great info about multithreading in Ruby, best practices and some of the underlying implementation issues.
 
+The basic takeaway was that, currently, the *only* way to get good 
+performance with multithreading in Ruby is with the stack of nginx + 
+Trinidad + JRuby. I was surprised to learn that the reference Ruby 
+implementation is single-threaded (and, judging from some of the Q&As, 
+this may not be fixed anytime soon).  Word on the street, by the way, is
+that Rubinius is working on better concurrency support as well.
+
+Interesting side note: I looked up the GIL on Wikipedia 
+and learned that Python is in exactly the same situation (the vanilla C implementation
+has a GIL but the Java-based version -- in Python's case, Jython -- does
+not.)
+
 ####LINKS
 * [JRuby](http://jruby.org/)
 * [Trinidad](http://rubygems.org/gems/trinidad)
+* [Wikipedia: Global Interpreter Lock](http://en.wikipedia.org/wiki/Global_Interpreter_Lock)
 
 ## Steve Klabnik: [Shoes](http://rubyconf.org/presentations/55) + Ron Evans: [KidsRuby](http://rubyconf.org/presentations/51)
 
