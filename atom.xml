@@ -4,13 +4,257 @@
   <title>codebykat.blog</title>
   <link href="http://codebykat.github.com/atom.xml" rel="self"/>
   <link href="http://codebykat.github.com/"/>
-  <updated>2011-10-03T17:30:36-04:00</updated>
+  <updated>2011-10-03T18:13:35-04:00</updated>
   <id>http://codebykat.github.com/</id>
   <author>
     <name>kat</name>
     
   </author>
 
+  
+  <entry>
+    <title>RubyConf Recap</title>
+    <link href="http://codebykat.github.com/blog/2011/10/02/rubyconf-recap/"/>
+    <updated>2011-10-02T10:58:00-04:00</updated>
+    <id>http://codebykat.github.com/blog/2011/10/02/rubyconf-recap</id>
+    <content type="html">&lt;p&gt;&lt;a href=&quot;http://rubyconf.org/&quot;&gt;RubyConf 2011&lt;/a&gt; was my first technical conference
+as a Rubyist, and it was an absolute blast.  I was afraid that many of
+the talks would be too advanced, since I&amp;#8217;ve been writing Ruby for less
+than a year, but on the whole there was a good mix for programmers at
+any level.  Not only did I learn a ton, I got to spend three days
+rubbing elbows with a bunch of smart, inspiring and genuinely nice
+folks. It was great to put faces to some of the names I&amp;#8217;d seen online
+and get to hear about what everyone&amp;#8217;s working on.  As my first real dose
+of the Ruby community, the experience was nothing but positive.&lt;/p&gt;
+
+&lt;p&gt;My main takeaways from the conference: I want to be more involved with
+the Ruby/open-source community, my tests are terrible (well, that&amp;#8217;s not really news),
+and concurrency/threading is a hot topic in the Ruby world right now.  Oh,
+and now I understand what these variants everyone is always talking about (JRuby,
+Rubinius, etc.) actually are!&lt;/p&gt;
+
+&lt;p&gt;The three days of &lt;a href=&quot;http://rubyconf.org/schedule&quot;&gt;talks&lt;/a&gt; ran the gamut
+from general to specialized, from little toy programs to big
+multi-person projects. What follows is not exhaustive by any means: just
+my notes, what I found the most interesting and memorable.  (All the
+talks were recorded by &lt;a href=&quot;http://confreaks.net/&quot;&gt;confreaks&lt;/a&gt;; videos should
+be available &lt;a href=&quot;http://confreaks.net/events/rubyconf2011&quot;&gt;here&lt;/a&gt; sometime
+soon.)&lt;/p&gt;
+
+&lt;h2&gt;Zach Holman: &lt;a href=&quot;http://rubyconf.org/presentations/62&quot;&gt;How Github Uses Github to Build Github&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Zach Holman&amp;#8217;s talk was mainly about Github&amp;#8217;s corporate culture and the
+organic, &lt;a href=&quot;http://blog.steveklabnik.com/2011/10/01/github-is-anarchy-for-programmers.html&quot;&gt;slightly anarchistic&lt;/a&gt;
+process (or, if you prefer, anti-process) they use to manage the
+&lt;a href=&quot;http://github.com/&quot;&gt;Github&lt;/a&gt; codebase.
+Zach talked about
+his experiences with a team that works asynchronously: geographically
+and temporally separate, without deadlines, meetings, interruptions, or
+any other sort of unnecessary overhead.
+Quite a bit of interesting stuff
+here &amp;#8211; it&amp;#8217;d definitely be worth watching the video.&lt;/p&gt;
+
+&lt;p&gt;As appealing as all of this sounds, as with any process, what works well
+for one specific group wouldn&amp;#8217;t necessarily translate well to a
+different setting.  Someone in the audience did point out that Github
+doesn&amp;#8217;t have any clients, and thus can be more flexible about deadlines.
+I do think that it hits the nail on the head in terms of developer
+motivation and efficiency, so even if you can&amp;#8217;t adopt it wholesale, it&amp;#8217;s
+worth looking at to see if any of the pieces might be a good fit.  If
+nothing else, I&amp;#8217;m sure that offering so much autonomy ensures that
+Github attracts some of the best developers out there.&lt;/p&gt;
+
+&lt;p&gt;Pikimal developers actually do work asynchronously quite a bit (we have
+a persistent chatroom, somewhat flexible hours and many opportunities to
+work remotely).  If we could figure out how to adapt it to our workflow,
+I think there might be something to be learned from the Github
+treatment of deadlines and scheduling.  As for deployment, I would &lt;em&gt;definitely&lt;/em&gt; love to make
+our continuous integration and build process more robust, as it&amp;#8217;s a big
+source of developer stress for us right now.&lt;/p&gt;
+
+&lt;h4&gt;LINKS&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://zachholman.com/talk/how-github-uses-github-to-build-github&quot;&gt;Zach&amp;#8217;s slides&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;He also has some excellent &lt;a href=&quot;http://zachholman.com/posts/how-github-works/&quot;&gt;blog posts&lt;/a&gt; on Github&amp;#8217;s workflow&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://scottchacon.com/2011/08/31/github-flow.html&quot;&gt;Scott Chacon on why Github doesn&amp;#8217;t use git-flow&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.43folders.com/2009/04/28/priorities&quot;&gt;Merlin Mann on priorities&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Rob Sanheim: &lt;a href=&quot;http://rubyconf.org/presentations/49&quot;&gt;How Getting Buff Can Make You a Better Rubyist&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Rob Sanheim has this outlandish idea that taking good care of
+yourself will make you a better programmer.  He&amp;#8217;s preaching to the
+choir, as far as I&amp;#8217;m concerned; I&amp;#8217;ve thought for some time that the
+hacker myth (i.e., that there&amp;#8217;s some kind of merit in coding night and day,
+fueled by coffee and Red Bull) can&amp;#8217;t die soon enough.  As Rob said,
+&amp;#8220;We need to move away from a culture where working crazy hours and
+pulling all-nighters is [considered] a good way to get things done.&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;I love that he not only talked about his own experience in finding more
+balance in his life, but provided some real data (neuroscience and
+statistics) about why this is a great idea.
+This has been my experience as well: the time you lose in taking better
+care of yourself is more than recovered in better focus, more energy,
+more creativity and just improved sanity generally.  (After this talk, &lt;a href=&quot;http://twitter.com/#!/dddagradi&quot;&gt;@dddagradi&lt;/a&gt; and I decided to officially start &lt;a href=&quot;http://www.c25k.com/&quot;&gt;c25k&lt;/a&gt;.  We&amp;#8217;ve done the first two runs already!)&lt;/p&gt;
+
+&lt;p&gt;Also: Getting everyone up to do &amp;#8220;programmer yoga&amp;#8221; at the beginning of the talk?  Total win.&lt;/p&gt;
+
+&lt;h4&gt;LINKS&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://dl.dropbox.com/u/7316160/rubyconf-2011-how-getting-buff-making-you-better-rubyist.pdf&quot;&gt;Rob&amp;#8217;s slides&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://gist.github.com/1251491&quot;&gt;Sexy Yoga Time&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.fastcompany.com/1783263/the-creative-brain-on-exercise&quot;&gt;The Creative Brain on Exercise&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Steven Harms: &lt;a href=&quot;http://rubyconf.org/presentations/56&quot;&gt;Practical Metaprogramming&lt;/a&gt; vs. Joshua Ballanco: &lt;a href=&quot;http://rubyconf.org/presentations/30&quot;&gt;Keeping Ruby Reasonable&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;I loved these two talks because they showcased some of the interesting (and sometimes worrying) things
+that can happen with a language like Ruby that allows you to dynamically
+add or override function bindings in the running environment.&lt;/p&gt;
+
+&lt;p&gt;Steven Harms used these powers for good, illustrating his talk with the real-life
+example of a program that models Latin verbs.  He made the concept of &amp;#8220;metaprogramming&amp;#8221;
+seem much less scary and mysterious, and provided a beautifully-organized taxonomy of
+metaprogramming patterns.  I did find his project extra interesting because learning Japanese is
+a (sadly somewhat neglected) side project of mine, so I always love talking about
+modeling human languages in terms of code.&lt;/p&gt;
+
+&lt;p&gt;Joshua Ballanc, on the other hand, had some very funny examples to illustrate how this powerful ability
+can be used in problematic ways, and why this can be bad (&amp;#8220;in this variation [of first-class environments],
+the user simply cannot reason about his code&amp;#8221;).&lt;/p&gt;
+
+&lt;h4&gt;LINKS&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://stevengharms.com/?p=2335&quot;&gt;Steven&amp;#8217;s page with slides and resources&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://ducktypo.blogspot.com/2010/08/metaprogramming-spell-book.html&quot;&gt;Metaprogramming Spell Book&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://slidesha.re/oYtC45&quot;&gt;Joshua&amp;#8217;s slides&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://funcall.blogspot.com/2009/09/first-class-environments.html&quot;&gt;Jrm on the dangers of first-class environments&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Jamis Buck: &lt;a href=&quot;http://rubyconf.org/presentations/24&quot;&gt;&amp;#8220;Algorithms&amp;#8221; is not a Four-Letter Word&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Jamis&amp;#8217; &lt;a href=&quot;http://bit.ly/pghOIG&quot;&gt;hand-drawn slides&lt;/a&gt; are amazing and
+adorable.  Seriously, go play with them, they&amp;#8217;re even interactive!  While
+the concepts will be old hat for anyone with a CS background,
+I loved the sense of playfulness and exploration.  This is what programming
+is all about.  (Also, I kind of want to write some maze-generation code
+now.)&lt;/p&gt;
+
+&lt;h2&gt;Dr Nic Williams: &lt;a href=&quot;http://rubyconf.org/presentations/18&quot;&gt;Threading vs Evented&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;This is a talk I walked into wondering whether I&amp;#8217;d understand anything,
+but it was actually quite interesting (and funny; I swear Dr Nic is secretly
+a stand-up comedian).  His slides don&amp;#8217;t seem to be online, but I&amp;#8217;ll be sure
+to link the video once it&amp;#8217;s up.  Lots of great info about multithreading in Ruby, best practices and some of the underlying implementation issues.&lt;/p&gt;
+
+&lt;h4&gt;LINKS&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://jruby.org/&quot;&gt;JRuby&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://rubygems.org/gems/trinidad&quot;&gt;Trinidad&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Steve Klabnik: &lt;a href=&quot;http://rubyconf.org/presentations/55&quot;&gt;Shoes&lt;/a&gt; + Ron Evans: &lt;a href=&quot;http://rubyconf.org/presentations/51&quot;&gt;KidsRuby&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Maybe it&amp;#8217;s just the years I spent working for various universities, but
+I&amp;#8217;m always interested in teaching tools and serious games. I think
+projects like HacketyHack and KidsRuby are a great way to make
+programming more accessible to the next generation, many of whom don&amp;#8217;t have
+access to any kind of formal CS education.
+Both Steve Klabnik and Ron Evans emphasize (and exemplify) the passion and
+natural curiosity that is so fundamental to our vocation as coders.&lt;/p&gt;
+
+&lt;h4&gt;LINKS&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://shoesrb.com/&quot;&gt;Shoes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://hackety-hack.com/&quot;&gt;HacketyHack&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://kidsruby.com/&quot;&gt;KidsRuby&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Gregory Moeck: &lt;a href=&quot;http://rubyconf.org/presentations/21&quot;&gt;Why You Don&amp;#8217;t Get Mock Objects&lt;/a&gt; + Chris Parsons: &lt;a href=&quot;http://rubyconf.org/presentations/12&quot;&gt;Your Tests are Lying to You&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;I admit it: my test-fu is weak.  I don&amp;#8217;t write tests as often as I
+should, and when I do write them, I often copy-and-paste bits and pieces
+of other tests without fully understanding how they work.  So Gregory
+Moeck&amp;#8217;s discussion of mock objects, including some simple rules for how
+to use them, was very enlightening.  His slides were full of pithy
+little rules of thumb like &amp;#8220;Mock roles, not objects&amp;#8221;, &amp;#8220;Mocks assert on
+messages&amp;#8221;, and &amp;#8220;Only mock types you own&amp;#8221;.&lt;/p&gt;
+
+&lt;p&gt;I actually missed the other testing talk, &amp;#8220;Your Tests are Lying to You&amp;#8221;,
+but I heard a lot about it after the fact, so I looked up and enjoyed
+the slides. I&amp;#8217;m putting them here, too, for your edification and to
+remind myself to check out the video when it gets posted.&lt;/p&gt;
+
+&lt;h4&gt;LINKS&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://speakerdeck.com/u/gmoeck/p/why-you-dont-get-mock-objects&quot;&gt;Gregory&amp;#8217;s slides&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://speakerdeck.com/u/chrismdp/p/your-tests-are-lying-to-you&quot;&gt;Chris&amp;#8217; slides&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627/ref=sr_1_1?s=books&amp;amp;ie=UTF8&amp;amp;qid=1317313536&amp;amp;sr=1-1&quot;&gt;Growing Object-Oriented Software, Guided by Tests&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;MISC. COOL STUFF&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://rubyrogues.com/&quot;&gt;Ruby Rogues podcast&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://rubykoans.com/&quot;&gt;Ruby Koans&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://railsplugins.org&quot;&gt;railsplugins.org&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;QUOTABLE&lt;/h2&gt;
+
+&lt;blockquote&gt;
+TDD (Twitter-Driven Development): Push to production and see if people are complaining about it.&lt;br /&gt;
+&lt;cite&gt;&lt;a href=&quot;http://twitter.com/#!/holman&quot;&gt;Zach Holman&lt;/a&gt;&lt;/cite&gt;
+&lt;/blockquote&gt;
+
+
+
+
+&lt;blockquote&gt;
+Every day that I don&amp;#8217;t type Thread.new is a day that my app might work.&lt;br /&gt;
+&lt;cite&gt;&lt;a href=&quot;http://twitter.com/#!/drnic&quot;&gt;Dr Nic&lt;/a&gt;, on the value of abstracting away multithreading code&lt;/cite&gt;
+&lt;/blockquote&gt;
+
+
+
+
+&lt;blockquote&gt;
+Write-only code: Code you write once and can never read again.&lt;br /&gt;
+&lt;cite&gt;unknown (possibly Chris Parsons?), via &lt;a href=&quot;http://twitter.com/#!/davidfurber/status/119899372325572608&quot;&gt;@davidfurber&lt;/a&gt;&lt;/cite&gt;
+&lt;/blockquote&gt;
+
+
+
+
+&lt;blockquote&gt;
+Candy Machine Interfaces: APIs that make it too easy to do the wrong thing.&lt;br /&gt;
+&lt;cite&gt;&lt;a href=&quot;http://twitter.com/#!/jimweirich&quot;&gt;Jim Weirich&lt;/a&gt;&lt;/cite&gt;
+&lt;/blockquote&gt;
+
+
+&lt;h2&gt;ALSO RECOMMEND&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://greengoddessnola.com&quot;&gt;The Green Goddess&lt;/a&gt;.  Seriously, if you&amp;#8217;re ever in New Orleans, you should go there.  The food is delicious and the atmosphere is completely charming.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.astralproject.com/&quot;&gt;Astral Project&lt;/a&gt;.  Authentic New Orleans jazz (I hear their sax player is quite good).&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.youtube.com/watch?v=IfeyUGZt8nk&quot;&gt;This&lt;/a&gt;.  You&amp;#8217;re welcome.&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
   
   <entry>
     <title>Hello</title>
