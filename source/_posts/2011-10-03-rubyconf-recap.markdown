@@ -146,7 +146,7 @@ that Rubinius is working on better concurrency support as well.
 Interesting side note: I looked up the GIL on Wikipedia 
 and learned that Python is in exactly the same situation (the vanilla C implementation
 has a GIL but the Java-based version -- in Python's case, Jython -- does
-not.)
+not).
 
 ####LINKS
 * [JRuby](http://jruby.org/)
@@ -185,14 +185,10 @@ remind myself to check out the video when it gets posted.
 
 ####LINKS
 * [Gregory's slides](http://speakerdeck.com/u/gmoeck/p/why-you-dont-get-mock-objects)
-* [Chris' slides](http://speakerdeck.com/u/chrismdp/p/your-tests-are-lying-to-you)
+* [Wikipedia: Single Responsibility Principle](http://en.wikipedia.org/wiki/Single_responsibility_principle)
 * [Growing Object-Oriented Software, Guided by Tests](http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627/ref=sr_1_1?s=books&ie=UTF8&qid=1317313536&sr=1-1)
+* [Chris' slides](http://speakerdeck.com/u/chrismdp/p/your-tests-are-lying-to-you)
 
-
-##MISC. COOL STUFF
-* [Ruby Rogues podcast](http://rubyrogues.com/)
-* [Ruby Koans](http://rubykoans.com/)
-* [railsplugins.org](http://railsplugins.org)
 
 ##QUOTABLE
 <blockquote>
@@ -214,6 +210,11 @@ Write-only code: Code you write once and can never read again.<br />
 Candy Machine Interfaces: APIs that make it too easy to do the wrong thing.<br />
 <cite><a href="http://twitter.com/#!/jimweirich">Jim Weirich</a></cite>
 </blockquote>
+
+## NEW BOOKMARKS
+* [Ruby Rogues podcast](http://rubyrogues.com/)
+* [Ruby Koans](http://rubykoans.com/)
+* [railsplugins.org](http://railsplugins.org)
 
 ## ALSO RECOMMEND
 * [The Green Goddess](http://greengoddessnola.com).  Seriously, if you're ever in New Orleans, you should go there.  The food is delicious and the atmosphere is completely charming.
