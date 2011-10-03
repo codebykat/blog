@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
+    <url>
+        <loc>http://codebykat.github.com/blog/2011/10/01/hello/</loc>
+        <lastmod>2011-10-02T21:45:47-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://codebykat.github.com/blog/2011/10/03/rubyconf-recap/</loc>
+        <lastmod>2011-10-03T18:15:20-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://codebykat.github.com/blog/archives/</loc>
+        <lastmod>2011-10-03T18:15:20-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://codebykat.github.com/</loc>
+        <lastmod>2011-10-03T18:15:20-04:00</lastmod>
+    </url>
+</urlset>
