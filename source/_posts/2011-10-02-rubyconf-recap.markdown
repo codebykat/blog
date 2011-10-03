@@ -4,7 +4,6 @@ title: "RubyConf Recap"
 date: 2011-10-02 10:58
 comments: true
 categories: [Ruby, conferences]
-published: false
 ---
 
 [RubyConf 2011](http://rubyconf.org/) was my first technical conference 
@@ -20,7 +19,7 @@ of the Ruby community, the experience was nothing but positive.
 My main takeaways from the conference: I want to be more involved with
 the Ruby/open-source community, my tests are terrible (well, that's not really news),
 and concurrency/threading is a hot topic in the Ruby world right now.  Oh,
-and now I know what these variants everyone is always talking about (JRuby,
+and now I understand what these variants everyone is always talking about (JRuby,
 Rubinius, etc.) actually are!
 
 The three days of [talks](http://rubyconf.org/schedule) ran the gamut 
@@ -135,34 +134,47 @@ but it was actually quite interesting (and funny; I swear Dr Nic is secretly
 a stand-up comedian).  His slides don't seem to be online, but I'll be sure
 to link the video once it's up.  Lots of great info about multithreading in Ruby, best practices and some of the underlying implementation issues.
 
-## Steve Klabnik: [Shoes](http://rubyconf.org/presentations/55) and Ron Evans: [KidsRuby](http://rubyconf.org/presentations/51)
+####LINKS
+* [JRuby](http://jruby.org/)
+* [Trinidad](http://rubygems.org/gems/trinidad)
 
-Maybe it's just the years I spent working for various universities, but I'm 
-always interested in teaching tools and serious games.
-I think these projects are a great way to bridge the gap left by the
-poor state of education available to many would-be programmers.  Both Steve 
-Klabnik and Ron Evans emphasize (and exemplify) the passion and natural 
-curiosity that is so fundamental to our vocation as coders.
+## Steve Klabnik: [Shoes](http://rubyconf.org/presentations/55) + Ron Evans: [KidsRuby](http://rubyconf.org/presentations/51)
+
+Maybe it's just the years I spent working for various universities, but 
+I'm always interested in teaching tools and serious games. I think 
+projects like HacketyHack and KidsRuby are a great way to make 
+programming more accessible to the next generation, many of whom don't have
+access to any kind of formal CS education.
+Both Steve Klabnik and Ron Evans emphasize (and exemplify) the passion and 
+natural curiosity that is so fundamental to our vocation as coders.
 
 #### LINKS
 * [Shoes](http://shoesrb.com/)
+* [HacketyHack](http://hackety-hack.com/)
 * [KidsRuby](http://kidsruby.com/)
-* HacketyHack
 
-## Gregory Moeck: Why You Don't Get Mock Objects
+## Gregory Moeck: [Why You Don't Get Mock Objects](http://rubyconf.org/presentations/21) + Chris Parsons: [Your Tests are Lying to You](http://rubyconf.org/presentations/12)
 
-(also: Your Tests are Lying to You)
+I admit it: my test-fu is weak.  I don't write tests as often as I 
+should, and when I do write them, I often copy-and-paste bits and pieces 
+of other tests without fully understanding how they work.  So Gregory 
+Moeck's discussion of mock objects, including some simple rules for how 
+to use them, was very enlightening.  His slides were full of pithy 
+little rules of thumb like "Mock roles, not objects", "Mocks assert on 
+messages", and "Only mock types you own".
 
-http://speakerdeck.com/u/gmoeck/p/why-you-dont-get-mock-objects
-  http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627/ref=sr_1_1?s=books&ie=UTF8&qid=1317313536&sr=1-1
+I actually missed the other testing talk, "Your Tests are Lying to You", 
+but I heard a lot about it after the fact, so I looked up and enjoyed 
+the slides. I'm putting them here, too, for your edification and to 
+remind myself to check out the video when it gets posted.
 
-Testing is a weak point in my knowledge as a Rubyist, and I have to admit I generally spend more time cursing at them in frustration than rocking them.  So I knew immediately I had to check out the talks focused on testing best practices.
+####LINKS
+* [Gregory's slides](http://speakerdeck.com/u/gmoeck/p/why-you-dont-get-mock-objects)
+* [Chris' slides](http://speakerdeck.com/u/chrismdp/p/your-tests-are-lying-to-you)
+* [Growing Object-Oriented Software, Guided by Tests](http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627/ref=sr_1_1?s=books&ie=UTF8&qid=1317313536&sr=1-1)
 
-"Mock roles, not objects."
 
-
-
-##LINKS
+##MISC. COOL STUFF
 * [Ruby Rogues podcast](http://rubyrogues.com/)
 * [Ruby Koans](http://rubykoans.com/)
 * [railsplugins.org](http://railsplugins.org)
@@ -191,3 +203,4 @@ Candy Machine Interfaces: APIs that make it too easy to do the wrong thing.<br /
 ## ALSO RECOMMEND
 * [The Green Goddess](http://greengoddessnola.com).  Seriously, if you're ever in New Orleans, you should go there.  The food is delicious and the atmosphere is completely charming.
 * [Astral Project](http://www.astralproject.com/).  Authentic New Orleans jazz (I hear their sax player is quite good).
+* [This](http://www.youtube.com/watch?v=IfeyUGZt8nk).  You're welcome.
