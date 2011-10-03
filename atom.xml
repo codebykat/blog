@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title>codebykat:blog</title>
+  <title>codebykat.blog</title>
   <link href="http://codebykat.github.com/atom.xml" rel="self"/>
   <link href="http://codebykat.github.com/"/>
-  <updated>2011-10-02T21:48:18-04:00</updated>
+  <updated>2011-10-02T21:49:33-04:00</updated>
   <id>http://codebykat.github.com/</id>
   <author>
     <name>kat</name>
