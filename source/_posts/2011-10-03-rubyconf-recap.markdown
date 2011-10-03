@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "RubyConf Recap"
-date: 2011-10-02 10:58
+date: 2011-10-03 10:58
 comments: true
 categories: [Ruby, conferences]
 ---
