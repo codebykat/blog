@@ -4,7 +4,7 @@
   <title>codebykat.blog</title>
   <link href="http://codebykat.github.com/atom.xml" rel="self"/>
   <link href="http://codebykat.github.com/"/>
-  <updated>2011-10-03T18:13:35-04:00</updated>
+  <updated>2011-10-03T18:15:40-04:00</updated>
   <id>http://codebykat.github.com/</id>
   <author>
     <name>kat</name>
@@ -14,9 +14,9 @@
   
   <entry>
     <title>RubyConf Recap</title>
-    <link href="http://codebykat.github.com/blog/2011/10/02/rubyconf-recap/"/>
-    <updated>2011-10-02T10:58:00-04:00</updated>
-    <id>http://codebykat.github.com/blog/2011/10/02/rubyconf-recap</id>
+    <link href="http://codebykat.github.com/blog/2011/10/03/rubyconf-recap/"/>
+    <updated>2011-10-03T10:58:00-04:00</updated>
+    <id>http://codebykat.github.com/blog/2011/10/03/rubyconf-recap</id>
     <content type="html">&lt;p&gt;&lt;a href=&quot;http://rubyconf.org/&quot;&gt;RubyConf 2011&lt;/a&gt; was my first technical conference
 as a Rubyist, and it was an absolute blast.  I was afraid that many of
 the talks would be too advanced, since I&amp;#8217;ve been writing Ruby for less
