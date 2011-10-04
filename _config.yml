@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://codebykat.github.com
+url: http://blog.codebykat.com
 title: codebykat.blog
 subtitle: thoughts on code, tech and life.
 author: kat
@@ -75,8 +75,8 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name:
+disqus_short_name: codebykat
 disqus_show_comment_count: false
 
 # Google Analytics
-google_analytics_tracking_id:
+google_analytics_tracking_id: UA-26103370-1
