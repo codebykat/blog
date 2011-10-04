@@ -132,16 +132,21 @@ now.)
 ## Dr Nic Williams: [Threading vs Evented](http://rubyconf.org/presentations/18)
 
 This is a talk I walked into wondering whether I'd understand anything, 
-but it was actually quite interesting (and funny; I swear Dr Nic is secretly
-a stand-up comedian).  His slides don't seem to be online, but I'll be sure
-to link the video once it's up.  Lots of great info about multithreading in Ruby, best practices and some of the underlying implementation issues.
+but it was actually quite interesting (and funny; I swear Dr Nic is 
+secretly a stand-up comedian).  His slides don't seem to be online, but 
+I'll be sure to link the video once it's up.  Lots of great info about 
+multithreading in Ruby, best practices and some of the underlying 
+implementation issues.
 
 The basic takeaway was that, currently, the *only* way to get good 
 performance with multithreading in Ruby is with the stack of nginx + 
 Trinidad + JRuby. I was surprised to learn that the reference Ruby 
-implementation is single-threaded (and, judging from some of the Q&As, 
+implementation is <del>single-threaded</del> often limited to a single
+Ruby thread per processor<super>*</super> (and, judging from some of the Q&As, 
 this may not be fixed anytime soon).  Word on the street, by the way, is
 that Rubinius is working on better concurrency support as well.
+
+<small>(<super>*</super>Updated with clarification from @merbist and @steveklabnik.  Thanks guys!)</small>
 
 Interesting side note: I looked up the GIL on Wikipedia 
 and learned that Python is in exactly the same situation (the vanilla C implementation
