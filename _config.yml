@@ -53,6 +53,7 @@ github_user: codebykat
 github_repo_count: 5
 github_show_profile_link: true
 github_skip_forks: true
+github_hide_blog_repo: true  # will hide repos named github_user.github.com
 
 # Twitter
 twitter_user:
