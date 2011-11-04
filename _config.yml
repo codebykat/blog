@@ -71,8 +71,9 @@ pinboard_user:
 pinboard_count: 3
 
 # Delicious
-delicious_user:
-delicious_count: 3
+delicious_user: wirehead
+delicious_count: 5
+delicious_tag: blog
 
 # Disqus Comments
 disqus_short_name: codebykat
