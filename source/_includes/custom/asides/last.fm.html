@@ -1,0 +1,21 @@
+{% if site.last_fm_user %}
+<section>
+  <h1>i'm listening to</h1>
+  <a href="http://www.last.fm/user/{{site.last_fm_user}}/?chartstyle=whitemoji">
+    <img src="http://imagegen.last.fm/whitemoji/recenttracks/{{site.last_fm_user}}.gif" border="0" alt="lastfm profile page" />
+  </a>
+</section>
+{% endif %}
+
+
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+
+  <script type="text/javascript">
+    $.domReady(function(){
+      getLastfmFeed("{{site.last_fm_user}}");
+    });
+  </script>
+
+  <script src="{{ root_url }}/javascripts/lastfm.js" type="text/javascript"> </script>
