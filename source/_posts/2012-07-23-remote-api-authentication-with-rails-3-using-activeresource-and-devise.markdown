@@ -198,7 +198,7 @@ Some ActiveResource methods *do* support passing extra parameters, but you can't
 	# whoops... what about...
 	> Group.site = "http://localhost:3030?auth_token=" . session[:auth_token]
 	> g.save!
-	> ActiveResource::UnauthorizedAccess: Failed.  Response code = 401.  Response message = Unauthorized .
+	ActiveResource::UnauthorizedAccess: Failed.  Response code = 401.  Response message = Unauthorized .
 	# OK, this is getting ugly...
 	> g.save!(:auth_token => "wh5xeZpwf6zHG9aHzy6M")
   	ArgumentError: wrong number of arguments (1 for 0)
