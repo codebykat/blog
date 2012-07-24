@@ -6,9 +6,11 @@ comments: true
 categories: Rails Ruby code walkthroughs
 ---
 
-I recently had to implement this workflow for a client project, and it got a little confusing.  I was able to find plenty of example code but getting all the moving parts to work together was a matter of trial-and-error.  I thought it might be helpful to do a walkthrough that illustrates the complete package.
+I recently had to implement this workflow for a client project, and it got a little confusing.  There's a lot of example code floating around, but it took some trial and error to get everything working smoothly.  So, on the off-chance it'll be helpful for someone else, here's a walkthrough that illustrates the complete package.
 
-Caveat: ActiveResource is going away in Rails 4, and if I had it to do over again, I might not choose to go that route.  At the outset of this project it seemed like the best way to quickly get things working.
+<!--more-->
+
+Caveat: ActiveResource [has been removed from Rails core](http://news.ycombinator.com/item?id=3818223), and I hear there may be better solutions out there for interacting with remote APIs.  At the outset of this project it seemed like the best way to quickly get things working, but your mileage may vary.
 
 ### Contents
 
@@ -26,7 +28,7 @@ The basic architecture consists of two Rails sites:
 
 I'll talk about the configuration for each of these separately, and then some of the integration work (read: hacking) I had to do to get everything running smoothly.
 
-**Security Note:** This setup is **completely insecure** if used over HTTP (since email/password are sent in plaintext).  You definitely want to ensure that your front end communicates with your backend strictly via HTTPS in order to protect against man-in-the-middle attacks.
+**Security Warning!** This setup is **completely insecure** if used over HTTP (since email/password are sent in plaintext).  You definitely want to ensure that your front end communicates with your backend strictly via HTTPS in order to protect against man-in-the-middle attacks.
 
 ## <a id='backend'>Part 1: The Backend</a>
 
@@ -37,7 +39,7 @@ This is covered well elsewhere so I won’t get into it.  Add ‘devise’ to yo
 ### 2. Configure Devise to use :token_authenticatable
 The [token_authenticatable](http://rdoc.info/github/plataformatec/devise/master/Devise/Models/TokenAuthenticatable) module adds authentication tokens to a model and sets it up so Devise can use them to log users in.
 
-First, we need a new database column.  Older versions of Devise did have the t.token_authenticatable shorthand for this, but that is now deprecated, so we need to set up the column and index manually.
+First, we need a new database column.  Older versions of Devise had the t.token_authenticatable shorthand for this, but that is now deprecated, so we need to set up the column and index manually.
 
 Create a new database migration:
     class AddTokensToUsers < ActiveRecord::Migration
@@ -184,13 +186,30 @@ Basically, ActiveResource doesn’t support this use case.  You can set an extra
 	@user.auth_token = token
 	# the backend gets {:user => {:email => "me@example.com", ... :auth_token => token}}
 
-Some ActiveResource methods *do* support an extra :params option, but you can't use it for every method, and we don't want to type all that out all the time anyway.
+Some ActiveResource methods *do* support passing extra parameters, but you can't do it for every method, the format is inconsistent (and apparently undocumented), and we don't want to type all that out all the time anyway...
 
-	response = User.delete(:sign_out, :auth_token => session[:auth_token])
+	> User.delete(:sign_out, :auth_token => session[:auth_token])
+	# that works, but...
+	> g = Group.find(:first, :params => {:auth_token => session[:auth_token])
+	# hmm... that works too, but the format is different...
+	> g.name = "edited name"
+	> g.save!
+	ActiveResource::UnauthorizedAccess: Failed.  Response code = 401.  Response message = Unauthorized .
+	# whoops... what about...
+	> Group.site = "http://localhost:3030?auth_token=" . session[:auth_token]
+	> g.save!
+	> ActiveResource::UnauthorizedAccess: Failed.  Response code = 401.  Response message = Unauthorized .
+	# OK, this is getting ugly...
+	> g.save!(:auth_token => "wh5xeZpwf6zHG9aHzy6M")
+  	ArgumentError: wrong number of arguments (1 for 0)
+	# fine then!
+	> g.put(g)
+	URI::InvalidURIError: bad URI(is not URI?): /groups/1/#<Group:0x007fe0d4998880>.json
+	#  (╯°□°）╯︵ ┻━┻) 
 
-What we really want is a way to automatically send the authentication token, if we have it, with every single request.
+OK, look, forget it.  What we *really* want is a way to automatically send the authentication token, if we have it, with every single request -- in a way that works transparently with ActiveResource, so it won't matter if we're doing a find, update, or delete.
 
-The solution I finally settled on requires small modifications to both the front and backend code.  You can overload ActiveResource's basic HTTP authentication functionality to add the token to the headers on every request, and then add code to the backend's application controller to pull the token out of the header and treat it like an ordinary param, allowing Devise to still authenticate transparently.
+As it happens, you can overload ActiveResource's basic HTTP authentication functionality to add the token to the headers on every request.  The catch is that we then have to add some more backend code, to pull the token out of the header and treat it like an ordinary param.
 
 Clear as mud?  Let's look at the code.
 
@@ -209,9 +228,9 @@ Then, add a filter near the top, so we call this function for every request:
 	
 If you examine the request sent to the backend, you'll see that it now contains a "HTTP-AUTHORIZATION" header.  So far, so good.
 
-Side note: If you have multiple ActiveResource models interacting with the backend, you will have to set the user on each one.   For example: "Group.user = session[:auth_token]".  The user will then be sent for every Group request, such as Group.find, Group.create, etc.
+Side note: If you have multiple ActiveResource models interacting with the backend, you will have to set the user on each one.   For example: "Group.user = session[:auth_token]".  The "user" (i.e., token) will then be sent for every Group request, such as Group.find, @group.save, etc.
 
-Now ActiveResource is sending the auth_token in the header, but the backend is expecting it to be a GET or POST parameter.  So we need a little hack on the backend to fish it out, thus allowing Devise to continue transparently handling authentication.
+Now ActiveResource is sending the auth_token in the header, but the backend is expecting to find it as a GET or POST parameter.  So we need a little hack on the backend to fish it out, thus allowing Devise to continue transparently handling authentication.
 
 To the backend code!
 
