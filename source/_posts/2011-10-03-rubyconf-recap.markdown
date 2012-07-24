@@ -16,6 +16,8 @@ folks. It was great to put faces to some of the names I'd seen online
 and get to hear about what everyone's working on.  As my first real dose 
 of the Ruby community, the experience was nothing but positive.
 
+<!--more-->
+
 My main takeaways from the conference: I want to be more involved with
 the Ruby/open-source community, my tests are terrible (well, that's not really news),
 and concurrency/threading is a hot topic in the Ruby world right now.  Oh,
@@ -29,8 +31,6 @@ my notes, what I found the most interesting and memorable.  (All the
 talks were recorded by [confreaks](http://confreaks.net/); videos should 
 be available [here](http://confreaks.net/events/rubyconf2011) sometime 
 soon.)
-
-<!--more-->
 
 ## Zach Holman: [How Github Uses Github to Build Github](http://rubyconf.org/presentations/62)
 
