@@ -19,6 +19,8 @@ var github = (function(){
           for (var i = 0; i < data.data.length; i++) {
             if (options.skip_forks && data.data[i].fork) { continue; }
             if (options.hide_blog_repo && data.data[i].name == options.user + ".github.com") { continue; }
+            if (options.hide_blog_repo && data.data[i].name == options.user + ".github.io") { continue; }
+            if (options.hide_blog_repo && data.data[i].name == "blog") { continue; }
             repos.push(data.data[i]);
           }
           repos.sort(function(a, b) {
