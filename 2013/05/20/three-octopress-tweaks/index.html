@@ -124,21 +124,21 @@
 
 <p>But you can also use this tweak to hide that secret project you’re working on… or that old, embarrassing one that never did work quite right.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>_config.yml</span><a href="https://github.com/codebykat/blog/commit/6fad9a1a0342ef9a2424ea0b695677d844985f7f">link</a></figcaption></figure></notextile></div>
-<div><div class="CodeRay">
-  <div class="code"><pre><span class="line change"><span class="change">@@</span> -67,6 +67,7 <span class="change">@@</span></span>
-     github_repo_count: 0
-     github_show_profile_link: true
-     github_skip_forks: true
-<span class="line insert"><span class="insert">+</span>    githup_skip_repos: []  # list of repos to hide from the sidebar. ex: [blog, username.github.io, old_embarrassing_project]</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header" style="margin-bottom:-5px;"><span>_config.yml</span><a href="https://github.com/codebykat/blog/commit/6fad9a1a0342ef9a2424ea0b695677d844985f7f">link</a></figcaption> <div class="CodeRay">
+  <div class="code"><pre>
+<span class="line change"><span class="change">@@</span> -67,6 +67,7 <span class="change">@@</span></span>
+         github_repo_count: 0
+         github_show_profile_link: true
+         github_skip_forks: true
+<span class="line insert"><span class="insert">+</span>        github_skip_repos: []  # list of repos to hide from the sidebar. ex: [blog, username.github.io, old_embarrassing_project]</span>
 </pre></div>
 </div>
-</div>
+ </figure></notextile></div>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>source/_includes/asides/github.html</span><a href="https://github.com/codebykat/blog/commit/6fad9a1a0342ef9a2424ea0b695677d844985f7f">link</a></figcaption></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header" style="margin-bottom:-5px;"><span>source_includes/asides/github.html</span><a href="https://github.com/codebykat/blog/commit/6fad9a1a0342ef9a2424ea0b695677d844985f7f">link</a></figcaption> <div class="CodeRay">
+  <div class="code"><pre>
 
-<div><div class="CodeRay">
-  <div class="code"><pre><span class="line change"><span class="change">@@</span> -21,6 +21,7 <span class="change">@@</span></span>
+<span class="line change"><span class="change">@@</span> -21,6 +21,7 <span class="change">@@</span></span>
              user: '{{site.github_user}}',
              count: {{site.github_repo_count}},
              skip_forks: {{site.github_skip_forks}},
@@ -146,13 +146,14 @@
              target: '#gh_repos'
          });
      });
+
 </pre></div>
 </div>
-</div>
+ </figure></notextile></div>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>source/javascripts/github.js</span><a href="https://github.com/codebykat/blog/commit/6fad9a1a0342ef9a2424ea0b695677d844985f7f">link</a></figcaption></figure></notextile></div>
-<div><div class="CodeRay">
-  <div class="code"><pre><span class="change"><span class="change">@@</span> -21,6 +21,7 <span class="change">@@</span></span> var github = (function(){
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header" style="margin-bottom:-5px;"><span>source/javascripts/github.js</span><a href="https://github.com/codebykat/blog/commit/6fad9a1a0342ef9a2424ea0b695677d844985f7f">link</a></figcaption> <div class="CodeRay">
+  <div class="code"><pre>
+<span class="line change"><span class="change">@@</span> -21,6 +21,7 <span class="change">@@</span></span>
            if (!data || !data.data) { return; }
            for (var i = 0; i &lt; data.data.length; i++) {
              if (options.skip_forks &amp;&amp; data.data[i].fork) { continue; }
@@ -162,7 +163,7 @@
            if (options.count) { repos.splice(options.count); }
 </pre></div>
 </div>
-</div>
+ </figure></notextile></div>
 
 <p><a name="pinboard-aside"></a></p>
 
@@ -170,21 +171,21 @@
 
 <p>I bookmark a lot of things on <a href="http://pinboard.in">Pinboard</a>, most of which aren’t exactly technical in nature.  Here’s a quick change that lets you save bookmarks with a specific tag (I use “blog”) to show them on the sidebar.</p>
 
-<p>And since we’re here anyway, may as well also change the header and loading text (I don’t know why, but I’ve never liked the word “linkroll”).</p>
+<p>And since we’re here anyway, may as well also change the header and loading text (I don’t know why, but I’ve never liked the word “linkroll”).  I also removed the tags to make it less cluttered.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>_config.yml</span><a href="https://github.com/codebykat/blog/commit/7718a6ce9d3a5b84dbc663547c878d26200842f0">link</a></figcaption></figure></notextile></div>
-<div><div class="CodeRay">
-  <div class="code"><pre>        # Pinboard
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header" style="margin-bottom:-5px;"><span>_config.yml</span><a href="https://github.com/codebykat/blog/commit/7718a6ce9d3a5b84dbc663547c878d26200842f0">link</a></figcaption> <div class="CodeRay">
+  <div class="code"><pre>
+        # Pinboard
         pinboard_user:
         pinboard_count: 5
 <span class="line insert"><span class="insert">+</span>       pinboard_tag: blog</span>
 </pre></div>
 </div>
-</div>
+ </figure></notextile></div>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>source/_includes/asides/pinboard.html</span><a href="https://github.com/codebykat/blog/commit/7718a6ce9d3a5b84dbc663547c878d26200842f0">link</a></figcaption></figure></notextile></div>
-<div><div class="CodeRay">
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header" style="margin-bottom:-5px;"><span>source/_includes/asides/pinboard.html</span><a href="https://github.com/codebykat/blog/commit/7718a6ce9d3a5b84dbc663547c878d26200842f0">link</a></figcaption> <div class="CodeRay">
   <div class="code"><pre>
+
 <span class="line change"><span class="change">@@</span> -1,13 +1,14 <span class="change">@@</span></span>
  &lt;section&gt;
 <span class="line delete"><span class="delete">-</span>  &lt;h1&gt;My Pinboard&lt;/h1&gt;</span>
@@ -205,11 +206,11 @@
 
 </pre></div>
 </div>
-</div>
+ </figure></notextile></div>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>source/javascript/pinboard.js</span><a href="https://github.com/codebykat/blog/commit/7718a6ce9d3a5b84dbc663547c878d26200842f0">link</a></figcaption></figure></notextile></div>
-<div><div class="CodeRay">
-  <div class="code"><pre><span class="change"><span class="change">@@</span> -41,16 +41,16 <span class="change">@@</span></span> function Pinboard_Linkroll() {
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header" style="margin-bottom:-5px;"><span>source/javascript/pinboard.js</span><a href="https://github.com/codebykat/blog/commit/7718a6ce9d3a5b84dbc663547c878d26200842f0">link</a></figcaption> <div class="CodeRay">
+  <div class="code"><pre>
+<span class="change"><span class="change">@@</span> -41,16 +41,16 <span class="change">@@</span></span> function Pinboard_Linkroll() {
      if (it.n) {
        str += &quot;&lt;span class=\&quot;pin-description\&quot;&gt;&quot; + this.cook(it.n) + &quot;&lt;/span&gt;\n&quot;;
      }
@@ -228,7 +229,7 @@
 <span class="line insert"><span class="insert">+</span>pinboardNS_fetch_script(&quot;http<span class="eyecatcher">://feeds.pinboard.in/json/u:&quot;+pinboard_user+&quot;/t:&quot;+pinboard_tag</span>+&quot;/?cb=pinboardNS_show_bmarks\&amp;count=&quot;+pinboard_count);</span>
 </pre></div>
 </div>
-</div>
+ </figure></notextile></div>
 
 <p>If you want to do this for Delicious, it’s <a href="https://github.com/codebykat/blog/commit/2a7b4ebc811a07dd89fca14ca158d4e96bbb4b13#source/_includes/asides/delicious.html">even easier</a>.</p>
 
