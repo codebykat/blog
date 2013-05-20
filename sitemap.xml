@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
+    <url>
+        <loc>http://blog.codebykat.com/2011/10/01/hello/</loc>
+        <lastmod>2013-05-19T18:39:29-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://blog.codebykat.com/2011/10/03/rubyconf-recap/</loc>
+        <lastmod>2013-05-19T18:39:29-07:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://blog.codebykat.com/2012/07/23/remote-api-authentication-with-rails-3-using-activeresource-and-devise/
+        </loc>
+        <lastmod>2013-05-19T18:39:29-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://blog.codebykat.com/archive/</loc>
+        <lastmod>2013-05-19T18:39:29-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://blog.codebykat.com/</loc>
+        <lastmod>2013-05-19T18:45:38-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://blog.codebykat.com/robots.txt</loc>
+        <lastmod>2013-05-19T18:37:34-07:00</lastmod>
+    </url>
+</urlset>
