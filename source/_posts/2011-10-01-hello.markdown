@@ -1,0 +1,9 @@
+---
+layout: post
+title: "Hello"
+date: 2011-10-01 21:44
+comments: true
+categories: 
+---
+
+I have a blog now.  Blogging is cool.
