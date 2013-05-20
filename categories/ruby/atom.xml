@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | codebykat.blog]]></title>
   <link href="http://blog.codebykat.com/categories/ruby/atom.xml" rel="self"/>
   <link href="http://blog.codebykat.com/"/>
-  <updated>2013-05-19T18:49:43-07:00</updated>
+  <updated>2013-05-19T19:13:35-07:00</updated>
   <id>http://blog.codebykat.com/</id>
   <author>
     <name><![CDATA[kat]]></name>
@@ -58,67 +58,134 @@
 
 <p>Create a new database migration:</p>
 
-<pre><code>class AddTokensToUsers &lt; ActiveRecord::Migration
-  def change
-    change_table :users do |t|
-      t.string :authentication_token
-    end
-    add_index  :users, :authentication_token, :unique =&gt; true
-  end
-end
-</code></pre>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">AddTokensToUsers</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;def change</span>
+</span><span class='line'><span class="sr">    change_table :users do |t|</span>
+</span><span class='line'><span class="sr">        t.string :authentication_token</span>
+</span><span class='line'><span class="sr">    end</span>
+</span><span class='line'><span class="sr">    add_index  :users, :authentication_token, :unique =&amp;gt; true</span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Tell Devise to use tokens for the User model by adding :token_authenticatable to the devise line in your model, e.g.:</p>
+<p>Tell Devise to use tokens for the User model by adding :token_authenticatable to the devise line in your model, e.g.:
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;devise :database_authenticatable, :registerable, :token_authenticatable,</span>
+</span><span class='line'><span class="sr">       :recoverable, :rememberable, :trackable, :validatable</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<pre><code>class User &lt; ActiveRecord::Base
-devise :database_authenticatable, :registerable, :token_authenticatable,
-       :recoverable, :rememberable, :trackable, :validatable
-</code></pre>
-
-<p>Then a few small changes to the Devise config (config/initializers/devise.rb):</p>
-
-<pre><code>config.skip_session_storage = [:http_auth, :token_auth]
-config.token_authentication_key = :auth_token
-</code></pre>
+<p>Then a few small changes to the Devise config (config/initializers/devise.rb):
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">skip_session_storage</span> <span class="o">=</span> <span class="o">[</span><span class="ss">:http_auth</span><span class="p">,</span> <span class="ss">:token_auth</span><span class="o">]</span>
+</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">token_authentication_key</span> <span class="o">=</span> <span class="ss">:auth_token</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>The first line tells Devise not to store the user in the session.</p>
 
 <p>The second line changes what you’re going to call your authentication token parameter &mdash; I changed mine to &ldquo;auth_token&rdquo; because I didn&rsquo;t want to be typing &ldquo;authentication_token&rdquo; all the time, but you can call it whatever you want (or leave it as the default).</p>
 
-<p>Now any protected content needs to be wrapped with a filter that tells it to deny access if the user is not authenticated.  In my Users controller, I added:</p>
-
-<pre><code>before_filter :authenticate_user!, :except =&gt; [:create, :new, :show]
-</code></pre>
+<p>Now any protected content needs to be wrapped with a filter that tells it to deny access if the user is not authenticated.  In my Users controller, I added:
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before_filter</span> <span class="ss">:authenticate_user!</span><span class="p">,</span> <span class="ss">:except</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:create</span><span class="p">,</span> <span class="ss">:new</span><span class="p">,</span> <span class="ss">:show</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>So now we have all the infrastructure in place.  Next, we need a way to actually authenticate the user.  That&rsquo;s the job of the Sessions controller, which checks a given username and password and, if they&rsquo;re valid, returns a token (as well as the ID of the user in question).  Note that, since there’s no session-based sign-in on the backend, we never call Devise&rsquo;s sign_in/sign_out methods.  We&rsquo;re just validating the password, making sure the user has an auth token generated, and returning it.</p>
 
 <p>(In some sense, a user is &ldquo;signed in&rdquo; to the backend as long as they have a valid authentication token.  If you want, you can expire this token after some period of time instead of having it stick around indefinitely.  You could also reset it after a certain number of uses.)</p>
 
-<pre><code>SessionsController:
-    def create
-        build_resource
-        resource = User.find_for_database_authentication(:email =&gt; params[:email])
-        return invalid_login_attempt unless resource
-
-        if resource.valid_password?(params[:password])
-        resource.ensure_authentication_token!  #make sure the user has a token generated
-        render :json =&gt; { :authentication_token =&gt; resource.authentication_token, :user_id =&gt; resource.id }, :status =&gt; :created
-        return
-    end
-end
-
-def destroy
-    # expire auth token
-    @user=User.where(:authentication_token=&gt;params[:auth_token]).first
-    @user.reset_authentication_token!
-    render :json =&gt; { :message =&gt; ["Session deleted."] },  :success =&gt; true, :status =&gt; :ok
-end
-
-def invalid_login_attempt
-    warden.custom_failure!
-    render :json =&gt; { :errors =&gt; ["Invalid email or password."] },  :success =&gt; false, :status =&gt; :unauthorized
-end
-</code></pre>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">SessionsController</span><span class="p">:</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;def create</span>
+</span><span class='line'><span class="sr">    build_resource</span>
+</span><span class='line'><span class="sr">    resource = User.find_for_database_authentication(:email =&amp;gt; params[:email])</span>
+</span><span class='line'><span class="sr">    return invalid_login_attempt unless resource</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">    if resource.valid_password?(params[:password])</span>
+</span><span class='line'><span class="sr">        resource.ensure_authentication_token!  #make sure the user has a token generated</span>
+</span><span class='line'><span class="sr">        render :json =&amp;gt; { :authentication_token =&amp;gt; resource.authentication_token, :user_id =&amp;gt; resource.id }, :status =&amp;gt; :created</span>
+</span><span class='line'><span class="sr">    return</span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">destroy</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;# expire auth token</span>
+</span><span class='line'><span class="sr">@user=User.where(:authentication_token=&amp;gt;params[:auth_token]).first</span>
+</span><span class='line'><span class="sr">@user.reset_authentication_token!</span>
+</span><span class='line'><span class="sr">render :json =&amp;gt; { :message =&amp;gt; [&quot;Session deleted.&quot;] },  :success =&amp;gt; true, :status =&amp;gt; :ok</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">invalid_login_attempt</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;warden.custom_failure!</span>
+</span><span class='line'><span class="sr">render :json =&amp;gt; { :errors =&amp;gt; [&quot;Invalid email or password.&quot;] },  :success =&amp;gt; false, :status =&amp;gt; :unauthorized</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>On login, we call @user.ensure_authentication_token! to make sure the user has a token saved.  You could also add this call to your User#create method to generate the token when the user is first created.</p>
 
@@ -126,27 +193,55 @@ end
 
 <p>The last piece of the puzzle is making sure you have sign_in and sign_out routes.  This should actually be a given if you have Devise set up correctly, but just to cover all the bases, a simple devise_for call in config/routes.rb will route /users/sign_in and /users/sign_out to the right places:</p>
 
-<pre><code>devise_for(:users, :controllers =&gt; { :sessions =&gt; "sessions" })
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">devise_for</span><span class="p">(</span><span class="ss">:users</span><span class="p">,</span> <span class="ss">:controllers</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:sessions</span> <span class="o">=&gt;</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">sessions</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-$ rake routes
-user_session            POST    /users/sign_in(.:format)    sessions#create
-destroy_user_session    DELETE  /users/sign_out(.:format)   sessions#destroy
-</code></pre>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rake routes
+</span><span class='line'>user_session            POST    /users/sign_in<span class="o">(</span>.:format<span class="o">)</span>    sessions#create
+</span><span class='line'>destroy_user_session    DELETE  /users/sign_out<span class="o">(</span>.:format<span class="o">)</span>   sessions#destroy
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Now you should be able to test the backend via curl or an app like <a href="http://ditchnet.org/httpclient/">HTTPClient</a>.  Here&rsquo;s a quick cheat sheet to test that everything&rsquo;s working properly.  This assumes you&rsquo;ve already created a user on the backend.  Obviously, replace &ldquo;localhost:3000&rdquo; with your test URL.</p>
 
-<pre><code>curl http://localhost:3000/users/sign_in --data "email=me@example.com&amp;password=secret"
-# should return the token and user ID.
-
-curl http://localhost:3000/a_protected_page
-# no token - should return 401 Unauthorized.
-
-curl http://localhost:3000/a_protected_page&amp;auth_token={token}
-# should return the requested information.
-
-curl -x DELETE http://localhost:3000/users/sign_out&amp;auth_token={token}
-# should log out the user, changing the authentication token.
-</code></pre>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>curl &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://localhost:3000/users/sign_in&quot;</span>&gt;http://localhost:3000/users/sign_in&lt;/a&gt; &amp;mdash;data &amp;ldquo;email<span class="o">=</span>me@example.com&amp;amp;password<span class="o">=</span>secret&amp;rdquo;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;should <span class="k">return </span>the token and user ID.&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;curl &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://localhost:3000/a_protected_page&quot;</span>&gt;http://localhost:3000/a_protected_page&lt;/a&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;no token &amp;ndash; should <span class="k">return </span>401 Unauthorized.&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;curl &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://localhost:3000/a_protected_page&amp;amp;auth_token=&quot;</span>&gt;http://localhost:3000/a_protected_page&amp;amp;auth_token<span class="o">=</span>&lt;/a&gt;<span class="o">{</span>token<span class="o">}</span>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;should <span class="k">return </span>the requested information.&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;curl -x DELETE &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://localhost:3000/users/sign_out&amp;amp;auth_token=&quot;</span>&gt;http://localhost:3000/users/sign_out&amp;amp;auth_token<span class="o">=</span>&lt;/a&gt;<span class="o">{</span>token<span class="o">}</span>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;should log out the user, changing the authentication token.&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>All good?  Now we just have to set it up so the front end knows how to play this game.</p>
 
@@ -156,56 +251,111 @@ curl -x DELETE http://localhost:3000/users/sign_out&amp;auth_token={token}
 
 <p>The user model on the front end is just an ActiveResource model whose site points to the backend URL.</p>
 
-<pre><code>class User &lt; ActiveResource::Base
-    self.site = "http://localhost:3000"  # your backend URL here
-end
-</code></pre>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="ss">ActiveResource</span><span class="p">:</span><span class="ss">:Base</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;self.site = &quot;http:/</span><span class="o">/</span><span class="ss">localhost</span><span class="p">:</span><span class="mi">3000</span><span class="s2">&quot;  # your backend URL here</span>
+</span><span class='line'><span class="s2">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&lt;p&gt;end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>We have another custom Sessions Controller on the front end which is responsible for managing login and logout.  It sends the provided email and password to the backend and saves the returned token and user ID in the session cookie.</p>
 
-<pre><code>class SessionsController &lt; ApplicationController
-
-    def create
-        # uses ActiveResource custom REST method
-        # POST to @user.site/users/sign_in with params email/password and receive a token in return
-        response = User.post(:sign_in, :email =&gt; params[:username], :password =&gt; params[:password])
-        if response.code == "201"
-            response_body = JSON.parse(response.body)
-            session[:auth_token] = response_body["authentication_token"]
-            session[:current_user_id] = response_body["user_id"]
-        else
-            # handle errors gracefully
-        end
-
-        redirect_to root_url and return
-    end
-
-    def destroy
-        # DELETE to @user.site/users/sign_out
-        response = User.delete(:sign_out)
-        # TODO might want to check response to make sure it worked..
-
-        # clean up our session and instance variables
-        session.delete(:auth_token)
-        session.delete(:current_user_id)
-        @current_user = nil
-
-        redirect_to root_url and return
-    end
-end
-</code></pre>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">SessionsController</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ApplicationController</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;def create</span>
+</span><span class='line'><span class="sr">    # uses ActiveResource custom REST method</span>
+</span><span class='line'><span class="sr">    # POST to @user.site/use</span><span class="n">rs</span><span class="o">/</span><span class="n">sign_in</span> <span class="n">with</span> <span class="n">params</span> <span class="n">email</span><span class="o">/</span><span class="n">password</span> <span class="ow">and</span> <span class="n">receive</span> <span class="n">a</span> <span class="n">token</span> <span class="k">in</span> <span class="k">return</span>
+</span><span class='line'>    <span class="n">response</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="ss">:sign_in</span><span class="p">,</span> <span class="ss">:email</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:username</span><span class="o">]</span><span class="p">,</span> <span class="ss">:password</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:password</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="s2">&quot;201&quot;</span>
+</span><span class='line'>        <span class="n">response_body</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">session</span><span class="o">[</span><span class="ss">:auth_token</span><span class="o">]</span> <span class="o">=</span> <span class="n">response_body</span><span class="o">[</span><span class="s2">&quot;authentication_token&quot;</span><span class="o">]</span>
+</span><span class='line'>        <span class="n">session</span><span class="o">[</span><span class="ss">:current_user_id</span><span class="o">]</span> <span class="o">=</span> <span class="n">response_body</span><span class="o">[</span><span class="s2">&quot;user_id&quot;</span><span class="o">]</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>        <span class="c1"># handle errors gracefully</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">redirect_to</span> <span class="n">root_url</span> <span class="ow">and</span> <span class="k">return</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">destroy</span>
+</span><span class='line'>    <span class="c1"># DELETE to @user.site/users/sign_out</span>
+</span><span class='line'>    <span class="n">response</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:sign_out</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># TODO might want to check response to make sure it worked..</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># clean up our session and instance variables</span>
+</span><span class='line'>    <span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:auth_token</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:current_user_id</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@current_user</span> <span class="o">=</span> <span class="kp">nil</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">redirect_to</span> <span class="n">root_url</span> <span class="ow">and</span> <span class="k">return</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Oh, know what else would be nice?  A helper method to see if we’re logged in and get the current user, similar to the one Devise provides.  This goes in the Application controller:</p>
 
-<pre><code>helper_method :current_user
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">helper_method</span> <span class="ss">:current_user</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;protected</span>
+</span><span class='line'><span class="sr">    def current_user</span>
+</span><span class='line'><span class="sr">        @_current_user ||= session[:current_user_id] &amp;amp;&amp;amp; User.find(session[:current_user_id])</span>
+</span><span class='line'><span class="sr">    end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-protected
-def current_user
-    @_current_user ||= session[:current_user_id] &amp;&amp; User.find(session[:current_user_id])
-end
-</code></pre>
-
-<p> So, cool, now you can refer to current_user from templates just like in Devise.</p>
+<p>So, cool, now you can refer to current_user from templates just like in Devise.</p>
 
 <h2><a id='part3'>Part 3. The Fiddly Bits</a></h2>
 
@@ -213,31 +363,87 @@ end
 
 <p>Basically, ActiveResource doesn’t support this use case.  You can set an extra parameter on the object, but then ActiveResource will pass it wrapped up as part of the object, not on its own, which will break the Devise magic on the backend.</p>
 
-<pre><code>@user.auth_token = token
-# the backend gets {:user =&gt; {:email =&gt; "me@example.com", ... :auth_token =&gt; token}}
-</code></pre>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vi">@user</span><span class="o">.</span><span class="n">auth_token</span> <span class="o">=</span> <span class="n">token</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;the backend gets {:user =&gt; {:email =&gt; &amp;ldquo;&lt;a href=&quot;&amp;#x6d;&amp;#97;&amp;#105;&amp;#108;&amp;#116;&amp;#111;&amp;#58;&amp;#x6d;&amp;#x65;&amp;#x40;&amp;#x65;&amp;#120;&amp;#97;&amp;#x6d;&amp;#112;&amp;#x6c;&amp;#101;&amp;#x2e;&amp;#x63;&amp;#111;&amp;#109;&quot;&gt;&amp;#109;&amp;#101;&amp;#x40;&amp;#x65;&amp;#x78;&amp;#x61;&amp;#x6d;&amp;#112;&amp;#108;&amp;#101;&amp;#x2e;&amp;#99;&amp;#111;&amp;#x6d;&lt;/</span><span class="n">a</span><span class="o">&gt;&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span> <span class="ss">:auth_token</span> <span class="o">=&gt;</span> <span class="n">token</span><span class="p">}}</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Some ActiveResource methods <em>do</em> support passing extra parameters, but you can&rsquo;t do it for every method, the format is inconsistent (and apparently undocumented), and we don&rsquo;t want to type all that out all the time anyway&hellip;</p>
 
-<pre><code>&gt; User.delete(:sign_out, :auth_token =&gt; session[:auth_token])
-# that works, but...
-&gt; g = Group.find(:first, :params =&gt; {:auth_token =&gt; session[:auth_token])
-# hmm... that works too, but the format is different...
-&gt; g.name = "edited name"
-&gt; g.save!
-ActiveResource::UnauthorizedAccess: Failed.  Response code = 401.  Response message = Unauthorized .
-# whoops... what about...
-&gt; Group.site = "http://localhost:3030?auth_token=" . session[:auth_token]
-&gt; g.save!
-ActiveResource::UnauthorizedAccess: Failed.  Response code = 401.  Response message = Unauthorized .
-# OK, this is getting ugly...
-&gt; g.save!(:auth_token =&gt; "wh5xeZpwf6zHG9aHzy6M")
-ArgumentError: wrong number of arguments (1 for 0)
-# fine then!
-&gt; g.put(g)
-URI::InvalidURIError: bad URI(is not URI?): /groups/1/#&lt;Group:0x007fe0d4998880&gt;.json
-#  (╯°□°）╯︵ ┻━┻) 
-</code></pre>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;blockquote&gt;&lt;p&gt;User.delete(:sign_out, :auth_token =&gt; session[:auth_token])&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">that</span> <span class="n">works</span><span class="p">,</span> <span class="n">but</span><span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;g = Group.find(:first, :params =&gt; {:auth_token =&gt; session[:auth_token])&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">hmm</span><span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span> <span class="n">that</span> <span class="n">works</span> <span class="n">too</span><span class="p">,</span> <span class="n">but</span> <span class="n">the</span> <span class="nb">format</span> <span class="n">is</span> <span class="n">different</span><span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;g.name = &amp;ldquo;edited name&amp;rdquo;</span>
+</span><span class='line'><span class="sr">g.save!</span>
+</span><span class='line'><span class="sr">ActiveResource::UnauthorizedAccess: Failed.  Response code = 401.  Response message = Unauthorized .&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">whoops</span><span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span> <span class="n">what</span> <span class="n">about</span><span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;Group.site = &amp;ldquo;&lt;a href=&quot;http:/</span><span class="o">/</span><span class="ss">localhost</span><span class="p">:</span><span class="mi">3030</span><span class="o">?</span><span class="n">auth_token</span><span class="o">=</span><span class="s2">&quot;&gt;http://localhost:3030?auth_token=&lt;/a&gt;&amp;rdquo; . session[:auth_token]</span>
+</span><span class='line'><span class="s2">g.save!</span>
+</span><span class='line'><span class="s2">ActiveResource::UnauthorizedAccess: Failed.  Response code = 401.  Response message = Unauthorized .&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&lt;h1&gt;OK, this is getting ugly&amp;hellip;&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&lt;p&gt;g.save!(:auth_token =&gt; &amp;ldquo;wh5xeZpwf6zHG9aHzy6M&amp;rdquo;)</span>
+</span><span class='line'><span class="s2">ArgumentError: wrong number of arguments (1 for 0)&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&lt;h1&gt;fine then!&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&lt;p&gt;g.put(g)</span>
+</span><span class='line'><span class="s2">URI::InvalidURIError: bad URI(is not URI?): /groups/1/#&amp;lt;Group:0x007fe0d4998880&gt;.json&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&lt;h1&gt;(╯°□°）╯︵ ┻━┻)&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p></blockquote>
 
 <p>OK, look, forget it.  What we <em>really</em> want is a way to automatically send the authentication token, if we have it, with every single request &mdash; in a way that works transparently with ActiveResource, so it won&rsquo;t matter if we&rsquo;re doing a find, update, or delete.</p>
 
@@ -251,15 +457,16 @@ URI::InvalidURIError: bad URI(is not URI?): /groups/1/#&lt;Group:0x007fe0d499888
 
 <p>First, add the following function to the &ldquo;protected&rdquo; section of the Application controller:</p>
 
-<pre><code>def set_auth_token
-    User.user = session[:auth_token]
-end
-</code></pre>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">set_auth_token</span>
+</span><span class='line'><span class="no">User</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">session</span><span class="o">[</span><span class="ss">:auth_token</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Then, add a filter near the top, so we call this function for every request:</p>
-
-<pre><code>before_filter :set_auth_token
-</code></pre>
+<p>Then, add a filter near the top, so we call this function for every request:
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before_filter</span> <span class="ss">:set_auth_token</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>If you examine the request sent to the backend, you&rsquo;ll see that it now contains a &ldquo;HTTP-AUTHORIZATION&rdquo; header.  So far, so good.</p>
 
@@ -269,19 +476,37 @@ end
 
 <p>To the backend code!</p>
 
-<pre><code>class ApplicationController &lt; ActionController::Base
-    prepend_before_filter :get_auth_token
-
-    private
-    def get_auth_token
-        if auth_token = params[:auth_token].blank? &amp;&amp; request.headers["HTTP_AUTHORIZATION"]
-            # we're overloading ActiveResource's Basic HTTP authentication here, so we need to
-            # do some unpacking of the auth token and re-save it as a parameter.
-            params[:auth_token] = auth_token.split.last.unpack('m').first.chop
-        end
-    end
-end
-</code></pre>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ApplicationController</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="ss">ActionController</span><span class="p">:</span><span class="ss">:Base</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;prepend_before_filter :get_auth_token</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">private</span>
+</span><span class='line'><span class="sr">    def get_auth_token</span>
+</span><span class='line'><span class="sr">        if auth_token = params[:auth_token].blank? &amp;amp;&amp;amp; request.headers[&quot;HTTP_AUTHORIZATION&quot;]</span>
+</span><span class='line'><span class="sr">            # we&#39;re overloading ActiveResource&#39;s Basic HTTP authentication here, so we need to</span>
+</span><span class='line'><span class="sr">            # do some unpacking of the auth token and re-save it as a parameter.</span>
+</span><span class='line'><span class="sr">            params[:auth_token] = auth_token.split.last.unpack(&#39;m&#39;).first.chop</span>
+</span><span class='line'><span class="sr">        end</span>
+</span><span class='line'><span class="sr">    end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Yeah, ActiveResource is also encrypting that token, and then sending it in the HTTP digest format &ldquo;user:password&rdquo;.  Since we didn&rsquo;t set the password and used our auth_token as the user string, we&rsquo;re looking at &ldquo;encryptedtoken:&rdquo; instead.</p>
 
