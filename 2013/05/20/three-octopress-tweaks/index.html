@@ -1,0 +1,434 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Three Octopress Tweaks - codebykat.blog</title>
+  <meta name="author" content="kat">
+
+  
+  <meta name="description" content="I’ve just updated Octopress to the latest and greatest version, including re-applying my various customizations. So, now that I happen to have them &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.codebykat.com/2013/05/20/three-octopress-tweaks">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="codebykat.blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26103370-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">codebykat.blog</a></h1>
+  
+    <h2>thoughts on code, tech and life.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.codebykat.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="http://codebykat.com/">code.by.kat</a></li>
+  <li><a href="/">blog</a></li>
+  <li><a href="/archive">archive</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Three Octopress Tweaks</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-20T09:39:00-07:00" pubdate data-updated="true">May 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I’ve just updated <a href="http://octopress.org/">Octopress</a> to the latest and greatest version, including re-applying my various customizations.  So, now that I happen to have them all in one place, here are three quick ways I’ve improved the base Octopress install:</p>
+
+<ul>
+  <li><a href="/2013/05/20/three-octopress-tweaks/#github-aside">Filter some repositories from GitHub sidebar</a></li>
+  <li><a href="/2013/05/20/three-octopress-tweaks/#pinboard-aside">Limit Pinboard sidebar to a specific tag</a></li>
+  <li><a href="/2013/05/20/three-octopress-tweaks/#archive-path">Move the Archive page to /archive</a></li>
+</ul>
+
+<!--more-->
+
+<p>Allons-y!</p>
+
+<p><a name="github-aside"></a></p>
+
+<h2 id="filter-some-repositories-from-github-sidebar">Filter some repositories from GitHub sidebar</h2>
+
+<p>If you’re hosting your Octopress blog on GitHub Pages, it’s kind of pointless to have that repository show up in the sidebar, especially since it doesn’t contain anything particularly interesting.</p>
+
+<p>But you can also use this tweak to hide that secret project you’re working on… or that old, embarrassing one that never did work quite right.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>_config.yml</span><a href="https://github.com/codebykat/blog/commit/6fad9a1a0342ef9a2424ea0b695677d844985f7f">link</a></figcaption></figure></notextile></div>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line change"><span class="change">@@</span> -67,6 +67,7 <span class="change">@@</span></span>
+     github_repo_count: 0
+     github_show_profile_link: true
+     github_skip_forks: true
+<span class="line insert"><span class="insert">+</span>    githup_skip_repos: []  # list of repos to hide from the sidebar. ex: [blog, username.github.io, old_embarrassing_project]</span>
+</pre></div>
+</div>
+</div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>source/_includes/asides/github.html</span><a href="https://github.com/codebykat/blog/commit/6fad9a1a0342ef9a2424ea0b695677d844985f7f">link</a></figcaption></figure></notextile></div>
+
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line change"><span class="change">@@</span> -21,6 +21,7 <span class="change">@@</span></span>
+             user: '{{site.github_user}}',
+             count: {{site.github_repo_count}},
+             skip_forks: {{site.github_skip_forks}},
+<span class="line insert"><span class="insert">+</span>            skip_repos: [ {% for repo in site.github_skip_repos %}&quot;{{repo}}&quot;{% unless forloop.last %}, {% endunless %}{% endfor %} ],</span>
+             target: '#gh_repos'
+         });
+     });
+</pre></div>
+</div>
+</div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>source/javascripts/github.js</span><a href="https://github.com/codebykat/blog/commit/6fad9a1a0342ef9a2424ea0b695677d844985f7f">link</a></figcaption></figure></notextile></div>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="change"><span class="change">@@</span> -21,6 +21,7 <span class="change">@@</span></span> var github = (function(){
+           if (!data || !data.data) { return; }
+           for (var i = 0; i &lt; data.data.length; i++) {
+             if (options.skip_forks &amp;&amp; data.data[i].fork) { continue; }
+<span class="line insert"><span class="insert">+</span>            if ( jQuery.inArray( data.data[i].name, options.skip_repos ) != -1) { continue; }</span>
+             repos.push(data.data[i]);
+           }
+           if (options.count) { repos.splice(options.count); }
+</pre></div>
+</div>
+</div>
+
+<p><a name="pinboard-aside"></a></p>
+
+<h2 id="limit-pinboard-sidebar-to-a-specific-tag">Limit Pinboard sidebar to a specific tag</h2>
+
+<p>I bookmark a lot of things on <a href="http://pinboard.in">Pinboard</a>, most of which aren’t exactly technical in nature.  Here’s a quick change that lets you save bookmarks with a specific tag (I use “blog”) to show them on the sidebar.</p>
+
+<p>And since we’re here anyway, may as well also change the header and loading text (I don’t know why, but I’ve never liked the word “linkroll”).</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>_config.yml</span><a href="https://github.com/codebykat/blog/commit/7718a6ce9d3a5b84dbc663547c878d26200842f0">link</a></figcaption></figure></notextile></div>
+<div><div class="CodeRay">
+  <div class="code"><pre>        # Pinboard
+        pinboard_user:
+        pinboard_count: 5
+<span class="line insert"><span class="insert">+</span>       pinboard_tag: blog</span>
+</pre></div>
+</div>
+</div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>source/_includes/asides/pinboard.html</span><a href="https://github.com/codebykat/blog/commit/7718a6ce9d3a5b84dbc663547c878d26200842f0">link</a></figcaption></figure></notextile></div>
+<div><div class="CodeRay">
+  <div class="code"><pre>
+<span class="line change"><span class="change">@@</span> -1,13 +1,14 <span class="change">@@</span></span>
+ &lt;section&gt;
+<span class="line delete"><span class="delete">-</span>  &lt;h1&gt;My Pinboard&lt;/h1&gt;</span>
+<span class="line delete"><span class="delete">-</span>  &lt;ul id=&quot;pinboard_linkroll&quot;&gt;Fetching linkroll...&lt;/ul&gt;</span>
+<span class="line delete"><span class="delete">-</span>  &lt;p&gt;&lt;a href=&quot;http://pinboard.in/u:{{ site.pinboard_user }}&quot;&gt;My Pinboard Bookmarks &amp;raquo;&lt;/a&gt;&lt;/p&gt;</span>
+<span class="line insert"><span class="insert">+</span>  &lt;h1&gt;Bookmarks&lt;/h1&gt;</span>
+<span class="line insert"><span class="insert">+</span>  &lt;ul id=&quot;pinboard_linkroll&quot;&gt;Fetching bookmarks...&lt;/ul&gt;</span>
+<span class="line insert"><span class="insert">+</span>  &lt;p&gt;&lt;a href=&quot;http://pinboard.in/u:{{ site.pinboard_user }}/t:{{ site.pinboard_tag }}&quot;&gt;see more &amp;raquo;&lt;/a&gt;&lt;/p&gt;</span>
+ &lt;/section&gt;
+ &lt;script type=&quot;text/javascript&quot;&gt;
+   var linkroll = 'pinboard_linkroll'; //id target for pinboard list
+   var pinboard_user = &quot;{{ site.pinboard_user }}&quot;; //id target for pinboard list
+   var pinboard_count = {{ site.pinboard_count }}; //id target for pinboard list
+<span class="line insert"><span class="insert">+</span>  var pinboard_tag = &quot;{{ site.pinboard_tag }}&quot;;</span>
+   (function(){
+     var pinboardInit = document.createElement('script');
+     pinboardInit.type = 'text/javascript';
+
+</pre></div>
+</div>
+</div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>source/javascript/pinboard.js</span><a href="https://github.com/codebykat/blog/commit/7718a6ce9d3a5b84dbc663547c878d26200842f0">link</a></figcaption></figure></notextile></div>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="change"><span class="change">@@</span> -41,16 +41,16 <span class="change">@@</span></span> function Pinboard_Linkroll() {
+     if (it.n) {
+       str += &quot;&lt;span class=\&quot;pin-description\&quot;&gt;&quot; + this.cook(it.n) + &quot;&lt;/span&gt;\n&quot;;
+     }
+<span class="line delete"><span class="delete">-</span>    if (it.t.length &gt; 0) {</span>
+<span class="line delete"><span class="delete">-</span>      for (var i = 0; i &lt; it.t.length; i++) {</span>
+<span class="line delete"><span class="delete">-</span>        var tag = it.t[i];</span>
+<span class="line delete"><span class="delete">-</span>        str += &quot; &lt;a class=\&quot;pin-tag\&quot; href=\&quot;https://pinboard.in/u:&quot;+ this.cook(it.a) + &quot;/t:&quot; + this.cook(tag) + &quot;\&quot;&gt;&quot; + this.cook(tag).replace(/^\s+|\s+$/g, '') + &quot;&lt;/a&gt; &quot;;</span>
+<span class="line delete"><span class="delete">-</span>      }</span>
+<span class="line delete"><span class="delete">-</span>    }</span>
+     str += &quot;&lt;/p&gt;&lt;/li&gt;\n&quot;;
+     return str;
+   }
+ }
+ Pinboard_Linkroll.prototype = new Pinboard_Linkroll();
+<span class="line delete"><span class="delete">-</span>pinboardNS_fetch_script(&quot;http<span class="eyecatcher">s://feeds.pinboard.in/json/v1/u:&quot;+pinboard_user</span>+&quot;/?cb=pinboardNS_show_bmarks\&amp;count=&quot;+pinboard_count);</span>
+<span class="line insert"><span class="insert">+</span>pinboardNS_fetch_script(&quot;http<span class="eyecatcher">://feeds.pinboard.in/json/u:&quot;+pinboard_user+&quot;/t:&quot;+pinboard_tag</span>+&quot;/?cb=pinboardNS_show_bmarks\&amp;count=&quot;+pinboard_count);</span>
+</pre></div>
+</div>
+</div>
+
+<p>If you want to do this for Delicious, it’s <a href="https://github.com/codebykat/blog/commit/2a7b4ebc811a07dd89fca14ca158d4e96bbb4b13#source/_includes/asides/delicious.html">even easier</a>.</p>
+
+<p><a name="archive-path"></a></p>
+
+<h2 id="move-the-archive-page-to-archive">Move the Archive page to /archive</h2>
+
+<p>Even if you have Octopress set to use the root directory, it defaults to putting your post archive under /blog/archive.  I found the fix in <a href="http://hackingoff.com/blog/jekyll-octopress-in-a-subdirectory-removing-redundant-slash-blog-path-to-archives-and-categories/">this post</a>:</p>
+
+<ul>
+  <li>Move source/blog/archive/index.html to source/archive/index.html.</li>
+  <li>Update navigation links accordingly, in source/_includes/custom/navigation.html and source/index.html.  (<em>Note: the example given is inconsistent; whether you’re using “archive” or “archives”, just ensure all the links match the directory name!</em>)</li>
+</ul>
+
+<p>I was originally planning to wrap this post up with a mention of prettifying code snippets, but that turned out to be a bit of a project, so I think it deserves its own post.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">kat</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-20T09:39:00-07:00" pubdate data-updated="true">May 20<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/meta/'>meta</a>, <a class='category' href='/categories/octopress/'>octopress</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.codebykat.com/2013/05/20/three-octopress-tweaks/" data-via="" data-counturl="http://blog.codebykat.com/2013/05/20/three-octopress-tweaks/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2012/07/23/remote-api-authentication-with-rails-3-using-activeresource-and-devise/" title="Previous Post: Remote API Authentication With Rails 3 Using ActiveResource and Devise">&laquo; Remote API Authentication With Rails 3 Using ActiveResource and Devise</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2013/05/20/three-octopress-tweaks/">Three Octopress Tweaks</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/07/23/remote-api-authentication-with-rails-3-using-activeresource-and-devise/">Remote API Authentication With Rails 3 Using ActiveResource and Devise</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/10/03/rubyconf-recap/">RubyConf Recap</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/10/01/hello/">Hello</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/codebykat">@codebykat</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'codebykat',
+            count: 5,
+            skip_forks: true,
+            skip_repos: [ "blog", "codebykat.github.io" ],
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Bookmarks</h1>
+  <ul id="pinboard_linkroll">Fetching bookmarks...</ul>
+  <p><a href="http://pinboard.in/u:wirehead/t:blog">see more &raquo;</a></p>
+</section>
+<script type="text/javascript">
+  var linkroll = 'pinboard_linkroll'; //id target for pinboard list
+  var pinboard_user = "wirehead"; //id target for pinboard list
+  var pinboard_count = 5; //id target for pinboard list
+  var pinboard_tag = "blog"; //id target for pinboard list
+  (function(){
+    var pinboardInit = document.createElement('script');
+    pinboardInit.type = 'text/javascript';
+    pinboardInit.async = true;
+    pinboardInit.src = '/javascripts/pinboard.js';
+    document.getElementsByTagName('head')[0].appendChild(pinboardInit);
+  })();
+</script>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - kat -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'codebykat';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.codebykat.com/2013/05/20/three-octopress-tweaks/';
+        var disqus_url = 'http://blog.codebykat.com/2013/05/20/three-octopress-tweaks/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
