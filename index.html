@@ -9,7 +9,7 @@
   <meta name="author" content="kat">
 
   
-  <meta name="description" content="I recently had to implement this workflow for a client project, and it got a little confusing. There&rsquo;s a lot of example code floating around, &hellip;">
+  <meta name="description" content="I’ve just updated Octopress to the latest and greatest version, including re-applying my various customizations. So, now that I happen to have them &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +84,53 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2013/05/20/three-octopress-tweaks/">Three Octopress Tweaks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-20T09:39:00-07:00" pubdate data-updated="true">May 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I’ve just updated <a href="http://octopress.org/">Octopress</a> to the latest and greatest version, including re-applying my various customizations.  So, now that I happen to have them all in one place, here are three quick ways I’ve improved the base Octopress install:</p>
+
+<ul>
+  <li><a href="#github-aside">Filter some repositories from GitHub sidebar</a></li>
+  <li><a href="#pinboard-aside">Limit Pinboard sidebar to a specific tag</a></li>
+  <li><a href="#archive-path">Move the Archive page to /archive</a></li>
+</ul>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2013/05/20/three-octopress-tweaks/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2012/07/23/remote-api-authentication-with-rails-3-using-activeresource-and-devise/">Remote API Authentication With Rails 3 Using ActiveResource and Devise</a></h1>
     
     
@@ -107,7 +154,7 @@
   </header>
 
 
-  <div class="entry-content"><p>I recently had to implement this workflow for a client project, and it got a little confusing.  There&rsquo;s a lot of example code floating around, but it took some trial and error to get everything working smoothly.  So, on the off-chance it&rsquo;ll be helpful for someone else, here&rsquo;s a walkthrough that illustrates the complete package.</p>
+  <div class="entry-content"><p>I recently had to implement this workflow for a client project, and it got a little confusing.  There’s a lot of example code floating around, but it took some trial and error to get everything working smoothly.  So, on the off-chance it’ll be helpful for someone else, here’s a walkthrough that illustrates the complete package.</p>
 
 </div>
   
@@ -148,14 +195,14 @@
   </header>
 
 
-  <div class="entry-content"><p><a href="http://rubyconf.org/">RubyConf 2011</a> was my first technical conference
-as a Rubyist, and it was an absolute blast.  I was afraid that many of
-the talks would be too advanced, since I&rsquo;ve been writing Ruby for less
-than a year, but on the whole there was a good mix for programmers at
-any level.  Not only did I learn a ton, I got to spend three days
-rubbing elbows with a bunch of smart, inspiring and genuinely nice
-folks. It was great to put faces to some of the names I&rsquo;d seen online
-and get to hear about what everyone&rsquo;s working on.  As my first real dose
+  <div class="entry-content"><p><a href="http://rubyconf.org/">RubyConf 2011</a> was my first technical conference 
+as a Rubyist, and it was an absolute blast.  I was afraid that many of 
+the talks would be too advanced, since I’ve been writing Ruby for less 
+than a year, but on the whole there was a good mix for programmers at 
+any level.  Not only did I learn a ton, I got to spend three days 
+rubbing elbows with a bunch of smart, inspiring and genuinely nice 
+folks. It was great to put faces to some of the names I’d seen online 
+and get to hear about what everyone’s working on.  As my first real dose 
 of the Ruby community, the experience was nothing but positive.</p>
 
 </div>
@@ -218,6 +265,10 @@ of the Ruby community, the experience was nothing but positive.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2013/05/20/three-octopress-tweaks/">Three Octopress Tweaks</a>
+      </li>
+    
+      <li class="post">
         <a href="/2012/07/23/remote-api-authentication-with-rails-3-using-activeresource-and-devise/">Remote API Authentication With Rails 3 Using ActiveResource and Devise</a>
       </li>
     
@@ -254,7 +305,7 @@ of the Ruby community, the experience was nothing but positive.</p>
             user: 'codebykat',
             count: 5,
             skip_forks: true,
-            hide_blog_repo: true,
+            skip_repos: [ "blog", "codebykat.github.io" ],
             target: '#gh_repos'
         });
     });

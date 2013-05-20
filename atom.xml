@@ -4,7 +4,7 @@
   <title><![CDATA[codebykat.blog]]></title>
   <link href="http://blog.codebykat.com/atom.xml" rel="self"/>
   <link href="http://blog.codebykat.com/"/>
-  <updated>2013-05-19T19:13:35-07:00</updated>
+  <updated>2013-05-20T11:18:37-07:00</updated>
   <id>http://blog.codebykat.com/</id>
   <author>
     <name><![CDATA[kat]]></name>
@@ -14,154 +14,271 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Three Octopress Tweaks]]></title>
+    <link href="http://blog.codebykat.com/2013/05/20/three-octopress-tweaks/"/>
+    <updated>2013-05-20T09:39:00-07:00</updated>
+    <id>http://blog.codebykat.com/2013/05/20/three-octopress-tweaks</id>
+    <content type="html"><![CDATA[<p>I’ve just updated <a href="http://octopress.org/">Octopress</a> to the latest and greatest version, including re-applying my various customizations.  So, now that I happen to have them all in one place, here are three quick ways I’ve improved the base Octopress install:</p>
+
+<ul>
+  <li><a href="#github-aside">Filter some repositories from GitHub sidebar</a></li>
+  <li><a href="#pinboard-aside">Limit Pinboard sidebar to a specific tag</a></li>
+  <li><a href="#archive-path">Move the Archive page to /archive</a></li>
+</ul>
+
+<!--more-->
+
+<p>Allons-y!</p>
+
+<p><a name="github-aside"></a></p>
+
+<h2 id="filter-some-repositories-from-github-sidebar">Filter some repositories from GitHub sidebar</h2>
+
+<p>If you’re hosting your Octopress blog on GitHub Pages, it’s kind of pointless to have that repository show up in the sidebar, especially since it doesn’t contain anything particularly interesting.</p>
+
+<p>But you can also use this tweak to hide that secret project you’re working on… or that old, embarrassing one that never did work quite right.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>_config.yml</span><a href="https://github.com/codebykat/blog/commit/6fad9a1a0342ef9a2424ea0b695677d844985f7f">link</a></figcaption></figure></notextile></div>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line change"><span class="change">@@</span> -67,6 +67,7 <span class="change">@@</span></span>
+     github_repo_count: 0
+     github_show_profile_link: true
+     github_skip_forks: true
+<span class="line insert"><span class="insert">+</span>    githup_skip_repos: []  # list of repos to hide from the sidebar. ex: [blog, username.github.io, old_embarrassing_project]</span>
+</pre></div>
+</div>
+</div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>source/_includes/asides/github.html</span><a href="https://github.com/codebykat/blog/commit/6fad9a1a0342ef9a2424ea0b695677d844985f7f">link</a></figcaption></figure></notextile></div>
+
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line change"><span class="change">@@</span> -21,6 +21,7 <span class="change">@@</span></span>
+             user: '{{site.github_user}}',
+             count: {{site.github_repo_count}},
+             skip_forks: {{site.github_skip_forks}},
+<span class="line insert"><span class="insert">+</span>            skip_repos: [ {% for repo in site.github_skip_repos %}&quot;{{repo}}&quot;{% unless forloop.last %}, {% endunless %}{% endfor %} ],</span>
+             target: '#gh_repos'
+         });
+     });
+</pre></div>
+</div>
+</div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>source/javascripts/github.js</span><a href="https://github.com/codebykat/blog/commit/6fad9a1a0342ef9a2424ea0b695677d844985f7f">link</a></figcaption></figure></notextile></div>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="change"><span class="change">@@</span> -21,6 +21,7 <span class="change">@@</span></span> var github = (function(){
+           if (!data || !data.data) { return; }
+           for (var i = 0; i &lt; data.data.length; i++) {
+             if (options.skip_forks &amp;&amp; data.data[i].fork) { continue; }
+<span class="line insert"><span class="insert">+</span>            if ( jQuery.inArray( data.data[i].name, options.skip_repos ) != -1) { continue; }</span>
+             repos.push(data.data[i]);
+           }
+           if (options.count) { repos.splice(options.count); }
+</pre></div>
+</div>
+</div>
+
+<p><a name="pinboard-aside"></a></p>
+
+<h2 id="limit-pinboard-sidebar-to-a-specific-tag">Limit Pinboard sidebar to a specific tag</h2>
+
+<p>I bookmark a lot of things on <a href="http://pinboard.in">Pinboard</a>, most of which aren’t exactly technical in nature.  Here’s a quick change that lets you save bookmarks with a specific tag (I use “blog”) to show them on the sidebar.</p>
+
+<p>And since we’re here anyway, may as well also change the header and loading text (I don’t know why, but I’ve never liked the word “linkroll”).</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>_config.yml</span><a href="https://github.com/codebykat/blog/commit/7718a6ce9d3a5b84dbc663547c878d26200842f0">link</a></figcaption></figure></notextile></div>
+<div><div class="CodeRay">
+  <div class="code"><pre>        # Pinboard
+        pinboard_user:
+        pinboard_count: 5
+<span class="line insert"><span class="insert">+</span>       pinboard_tag: blog</span>
+</pre></div>
+</div>
+</div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>source/_includes/asides/pinboard.html</span><a href="https://github.com/codebykat/blog/commit/7718a6ce9d3a5b84dbc663547c878d26200842f0">link</a></figcaption></figure></notextile></div>
+<div><div class="CodeRay">
+  <div class="code"><pre>
+<span class="line change"><span class="change">@@</span> -1,13 +1,14 <span class="change">@@</span></span>
+ &lt;section&gt;
+<span class="line delete"><span class="delete">-</span>  &lt;h1&gt;My Pinboard&lt;/h1&gt;</span>
+<span class="line delete"><span class="delete">-</span>  &lt;ul id=&quot;pinboard_linkroll&quot;&gt;Fetching linkroll...&lt;/ul&gt;</span>
+<span class="line delete"><span class="delete">-</span>  &lt;p&gt;&lt;a href=&quot;http://pinboard.in/u:{{ site.pinboard_user }}&quot;&gt;My Pinboard Bookmarks &amp;raquo;&lt;/a&gt;&lt;/p&gt;</span>
+<span class="line insert"><span class="insert">+</span>  &lt;h1&gt;Bookmarks&lt;/h1&gt;</span>
+<span class="line insert"><span class="insert">+</span>  &lt;ul id=&quot;pinboard_linkroll&quot;&gt;Fetching bookmarks...&lt;/ul&gt;</span>
+<span class="line insert"><span class="insert">+</span>  &lt;p&gt;&lt;a href=&quot;http://pinboard.in/u:{{ site.pinboard_user }}/t:{{ site.pinboard_tag }}&quot;&gt;see more &amp;raquo;&lt;/a&gt;&lt;/p&gt;</span>
+ &lt;/section&gt;
+ &lt;script type=&quot;text/javascript&quot;&gt;
+   var linkroll = 'pinboard_linkroll'; //id target for pinboard list
+   var pinboard_user = &quot;{{ site.pinboard_user }}&quot;; //id target for pinboard list
+   var pinboard_count = {{ site.pinboard_count }}; //id target for pinboard list
+<span class="line insert"><span class="insert">+</span>  var pinboard_tag = &quot;{{ site.pinboard_tag }}&quot;;</span>
+   (function(){
+     var pinboardInit = document.createElement('script');
+     pinboardInit.type = 'text/javascript';
+
+</pre></div>
+</div>
+</div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header"><span>source/javascript/pinboard.js</span><a href="https://github.com/codebykat/blog/commit/7718a6ce9d3a5b84dbc663547c878d26200842f0">link</a></figcaption></figure></notextile></div>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="change"><span class="change">@@</span> -41,16 +41,16 <span class="change">@@</span></span> function Pinboard_Linkroll() {
+     if (it.n) {
+       str += &quot;&lt;span class=\&quot;pin-description\&quot;&gt;&quot; + this.cook(it.n) + &quot;&lt;/span&gt;\n&quot;;
+     }
+<span class="line delete"><span class="delete">-</span>    if (it.t.length &gt; 0) {</span>
+<span class="line delete"><span class="delete">-</span>      for (var i = 0; i &lt; it.t.length; i++) {</span>
+<span class="line delete"><span class="delete">-</span>        var tag = it.t[i];</span>
+<span class="line delete"><span class="delete">-</span>        str += &quot; &lt;a class=\&quot;pin-tag\&quot; href=\&quot;https://pinboard.in/u:&quot;+ this.cook(it.a) + &quot;/t:&quot; + this.cook(tag) + &quot;\&quot;&gt;&quot; + this.cook(tag).replace(/^\s+|\s+$/g, '') + &quot;&lt;/a&gt; &quot;;</span>
+<span class="line delete"><span class="delete">-</span>      }</span>
+<span class="line delete"><span class="delete">-</span>    }</span>
+     str += &quot;&lt;/p&gt;&lt;/li&gt;\n&quot;;
+     return str;
+   }
+ }
+ Pinboard_Linkroll.prototype = new Pinboard_Linkroll();
+<span class="line delete"><span class="delete">-</span>pinboardNS_fetch_script(&quot;http<span class="eyecatcher">s://feeds.pinboard.in/json/v1/u:&quot;+pinboard_user</span>+&quot;/?cb=pinboardNS_show_bmarks\&amp;count=&quot;+pinboard_count);</span>
+<span class="line insert"><span class="insert">+</span>pinboardNS_fetch_script(&quot;http<span class="eyecatcher">://feeds.pinboard.in/json/u:&quot;+pinboard_user+&quot;/t:&quot;+pinboard_tag</span>+&quot;/?cb=pinboardNS_show_bmarks\&amp;count=&quot;+pinboard_count);</span>
+</pre></div>
+</div>
+</div>
+
+<p>If you want to do this for Delicious, it’s <a href="https://github.com/codebykat/blog/commit/2a7b4ebc811a07dd89fca14ca158d4e96bbb4b13#source/_includes/asides/delicious.html">even easier</a>.</p>
+
+<p><a name="archive-path"></a></p>
+
+<h2 id="move-the-archive-page-to-archive">Move the Archive page to /archive</h2>
+
+<p>Even if you have Octopress set to use the root directory, it defaults to putting your post archive under /blog/archive.  I found the fix in <a href="http://hackingoff.com/blog/jekyll-octopress-in-a-subdirectory-removing-redundant-slash-blog-path-to-archives-and-categories/">this post</a>:</p>
+
+<ul>
+  <li>Move source/blog/archive/index.html to source/archive/index.html.</li>
+  <li>Update navigation links accordingly, in source/_includes/custom/navigation.html and source/index.html.  (<em>Note: the example given is inconsistent; whether you’re using “archive” or “archives”, just ensure all the links match the directory name!</em>)</li>
+</ul>
+
+<p>I was originally planning to wrap this post up with a mention of prettifying code snippets, but that turned out to be a bit of a project, so I think it deserves its own post.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Remote API Authentication With Rails 3 Using ActiveResource and Devise]]></title>
     <link href="http://blog.codebykat.com/2012/07/23/remote-api-authentication-with-rails-3-using-activeresource-and-devise/"/>
     <updated>2012-07-23T14:49:00-07:00</updated>
     <id>http://blog.codebykat.com/2012/07/23/remote-api-authentication-with-rails-3-using-activeresource-and-devise</id>
-    <content type="html"><![CDATA[<p>I recently had to implement this workflow for a client project, and it got a little confusing.  There&rsquo;s a lot of example code floating around, but it took some trial and error to get everything working smoothly.  So, on the off-chance it&rsquo;ll be helpful for someone else, here&rsquo;s a walkthrough that illustrates the complete package.</p>
+    <content type="html"><![CDATA[<p>I recently had to implement this workflow for a client project, and it got a little confusing.  There’s a lot of example code floating around, but it took some trial and error to get everything working smoothly.  So, on the off-chance it’ll be helpful for someone else, here’s a walkthrough that illustrates the complete package.</p>
 
 <!--more-->
 
-
 <p>Caveat: ActiveResource <a href="http://news.ycombinator.com/item?id=3818223">has been removed from Rails core</a>, and I hear there may be better solutions out there for interacting with remote APIs.  At the outset of this project it seemed like the best way to quickly get things working, but your mileage may vary.</p>
 
-<h3>Contents</h3>
+<h3 id="contents">Contents</h3>
 
 <p><a href="#part0">Part 0: The Big Picture</a><br />
 <a href="#backend">Part 1: The Backend</a><br />
 <a href="#frontend">Part 2: The Front End</a><br />
 <a href="#part3">Part 3: The Fiddly Bits</a></p>
 
-<h2><a id='part0'>Part 0: The Big Picture</a></h2>
-
+<h2 id="a-idpart0part-0-the-big-picturea"><a id="part0">Part 0: The Big Picture</a></h2>
 <p>The basic architecture consists of two Rails sites:</p>
 
-<p><strong>The Backend:</strong> A pure JSON API that authenticates users via Devise&rsquo;s token_authenticatable module.  Uses ActiveRecord database models, no session storage.</p>
+<p><strong>The Backend:</strong> A pure JSON API that authenticates users via Devise’s token_authenticatable module.  Uses ActiveRecord database models, no session storage.</p>
 
 <p><strong>The Front End:</strong> A client that signs users in by requesting and storing a token from the backend.  Uses session storage and ActiveResource models.</p>
 
-<p>I&rsquo;ll talk about the configuration for each of these separately, and then some of the integration work (read: hacking) I had to do to get everything running smoothly.</p>
+<p>I’ll talk about the configuration for each of these separately, and then some of the integration work (read: hacking) I had to do to get everything running smoothly.</p>
 
 <p><strong>Security Warning!</strong> This setup is <strong>completely insecure</strong> if used over HTTP (since email/password are sent in plaintext).  You definitely want to ensure that your front end communicates with your backend strictly via HTTPS in order to protect against man-in-the-middle attacks.</p>
 
-<h2><a id='backend'>Part 1: The Backend</a></h2>
+<h2 id="a-idbackendpart-1-the-backenda"><a id="backend">Part 1: The Backend</a></h2>
 
-<h3>1. Install Devise</h3>
+<h3 id="install-devise">1. Install Devise</h3>
 
 <p>This is covered well elsewhere so I won’t get into it.  Add ‘devise’ to your gemfile and check out the Devise <a href="https://github.com/plataformatec/devise#getting-started">documentation</a> for basic setup.  <a href="http://railscasts.com/episodes/209-introducing-devise?view=asciicast">RailsCasts</a> are also a great resource for this.</p>
 
-<h3>2. Configure Devise to use :token_authenticatable</h3>
-
+<h3 id="configure-devise-to-use-tokenauthenticatable">2. Configure Devise to use :token_authenticatable</h3>
 <p>The <a href="http://rdoc.info/github/plataformatec/devise/master/Devise/Models/TokenAuthenticatable">token_authenticatable</a> module adds authentication tokens to a model and sets it up so Devise can use them to log users in.</p>
 
 <p>First, we need a new database column.  Older versions of Devise had the t.token_authenticatable shorthand for this, but that is now deprecated, so we need to set up the column and index manually.</p>
 
 <p>Create a new database migration:</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">AddTokensToUsers</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
-</span><span class='line'>      <span class="n">change_table</span> <span class="ss">:users</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
-</span><span class='line'>          <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:authentication_token</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>      <span class="n">add_index</span>  <span class="ss">:users</span><span class="p">,</span> <span class="ss">:authentication_token</span><span class="p">,</span> <span class="ss">:unique</span> <span class="o">=&gt;</span> <span class="kp">true</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">AddTokensToUsers</span> &lt; <span class="constant">ActiveRecord</span>::<span class="constant">Migration</span>
+    <span class="keyword">def</span> <span class="function">change</span>
+        change_table <span class="symbol">:users</span> <span class="keyword">do</span> |t|
+            t.string <span class="symbol">:authentication_token</span>
+        <span class="keyword">end</span>
+        add_index  <span class="symbol">:users</span>, <span class="symbol">:authentication_token</span>, <span class="symbol">:unique</span> =&gt; <span class="predefined-constant">true</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre></div>
+</div>
+</div>
 
 <p>Tell Devise to use tokens for the User model by adding :token_authenticatable to the devise line in your model, e.g.:</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
-</span><span class='line'>  <span class="n">devise</span> <span class="ss">:database_authenticatable</span><span class="p">,</span> <span class="ss">:registerable</span><span class="p">,</span> <span class="ss">:token_authenticatable</span><span class="p">,</span>
-</span><span class='line'>         <span class="ss">:recoverable</span><span class="p">,</span> <span class="ss">:rememberable</span><span class="p">,</span> <span class="ss">:trackable</span><span class="p">,</span> <span class="ss">:validatable</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">User</span> &lt; <span class="constant">ActiveRecord</span>::<span class="constant">Base</span>
+    devise <span class="symbol">:database_authenticatable</span>, <span class="symbol">:registerable</span>, <span class="symbol">:token_authenticatable</span>,
+           <span class="symbol">:recoverable</span>, <span class="symbol">:rememberable</span>, <span class="symbol">:trackable</span>, <span class="symbol">:validatable</span>
+</pre></div>
+</div>
+</div>
 
 <p>Then a few small changes to the Devise config (config/initializers/devise.rb):</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">skip_session_storage</span> <span class="o">=</span> <span class="o">[</span><span class="ss">:http_auth</span><span class="p">,</span> <span class="ss">:token_auth</span><span class="o">]</span>
-</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">token_authentication_key</span> <span class="o">=</span> <span class="ss">:auth_token</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div><div class="CodeRay">
+  <div class="code"><pre>config.skip_session_storage = [<span class="symbol">:http_auth</span>, <span class="symbol">:token_auth</span>]
+config.token_authentication_key = <span class="symbol">:auth_token</span>
+</pre></div>
+</div>
+</div>
 
 <p>The first line tells Devise not to store the user in the session.</p>
 
-<p>The second line changes what you’re going to call your authentication token parameter &mdash; I changed mine to &ldquo;auth_token&rdquo; because I didn&rsquo;t want to be typing &ldquo;authentication_token&rdquo; all the time, but you can call it whatever you want (or leave it as the default).</p>
+<p>The second line changes what you’re going to call your authentication token parameter – I changed mine to “auth_token” because I didn’t want to be typing “authentication_token” all the time, but you can call it whatever you want (or leave it as the default).</p>
 
 <p>Now any protected content needs to be wrapped with a filter that tells it to deny access if the user is not authenticated.  In my Users controller, I added:</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before_filter</span> <span class="ss">:authenticate_user!</span><span class="p">,</span> <span class="ss">:except</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:create</span><span class="p">,</span> <span class="ss">:new</span><span class="p">,</span> <span class="ss">:show</span><span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
+<div><div class="CodeRay">
+  <div class="code"><pre>before_filter <span class="symbol">:authenticate_user!</span>, <span class="symbol">:except</span> =&gt; [<span class="symbol">:create</span>, <span class="symbol">:new</span>, <span class="symbol">:show</span>]
+</pre></div>
+</div>
+</div>
 
+<p>So now we have all the infrastructure in place.  Next, we need a way to actually authenticate the user.  That’s the job of the Sessions controller, which checks a given username and password and, if they’re valid, returns a token (as well as the ID of the user in question).  Note that, since there’s no session-based sign-in on the backend, we never call Devise’s sign_in/sign_out methods.  We’re just validating the password, making sure the user has an auth token generated, and returning it.</p>
 
-<p>So now we have all the infrastructure in place.  Next, we need a way to actually authenticate the user.  That&rsquo;s the job of the Sessions controller, which checks a given username and password and, if they&rsquo;re valid, returns a token (as well as the ID of the user in question).  Note that, since there’s no session-based sign-in on the backend, we never call Devise&rsquo;s sign_in/sign_out methods.  We&rsquo;re just validating the password, making sure the user has an auth token generated, and returning it.</p>
+<p>(In some sense, a user is “signed in” to the backend as long as they have a valid authentication token.  If you want, you can expire this token after some period of time instead of having it stick around indefinitely.  You could also reset it after a certain number of uses.)</p>
 
-<p>(In some sense, a user is &ldquo;signed in&rdquo; to the backend as long as they have a valid authentication token.  If you want, you can expire this token after some period of time instead of having it stick around indefinitely.  You could also reset it after a certain number of uses.)</p>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="key">SessionsController</span>:
+    <span class="keyword">def</span> <span class="function">create</span>
+        build_resource
+        resource = <span class="constant">User</span>.find_for_database_authentication(<span class="symbol">:email</span> =&gt; params[<span class="symbol">:email</span>])
+        <span class="keyword">return</span> invalid_login_attempt <span class="keyword">unless</span> resource
+            
+        <span class="keyword">if</span> resource.valid_password?(params[<span class="symbol">:password</span>])
+            resource.ensure_authentication_token!  <span class="comment">#make sure the user has a token generated</span>
+            render <span class="symbol">:json</span> =&gt; { <span class="symbol">:authentication_token</span> =&gt; resource.authentication_token, <span class="symbol">:user_id</span> =&gt; resource.id }, <span class="symbol">:status</span> =&gt; <span class="symbol">:created</span>
+        <span class="keyword">return</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">SessionsController</span><span class="p">:</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">create</span>
-</span><span class='line'>      <span class="n">build_resource</span>
-</span><span class='line'>      <span class="n">resource</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_for_database_authentication</span><span class="p">(</span><span class="ss">:email</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:email</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">return</span> <span class="n">invalid_login_attempt</span> <span class="k">unless</span> <span class="n">resource</span>
-</span><span class='line'>          
-</span><span class='line'>      <span class="k">if</span> <span class="n">resource</span><span class="o">.</span><span class="n">valid_password?</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:password</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>          <span class="n">resource</span><span class="o">.</span><span class="n">ensure_authentication_token!</span>  <span class="c1">#make sure the user has a token generated</span>
-</span><span class='line'>          <span class="n">render</span> <span class="ss">:json</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:authentication_token</span> <span class="o">=&gt;</span> <span class="n">resource</span><span class="o">.</span><span class="n">authentication_token</span><span class="p">,</span> <span class="ss">:user_id</span> <span class="o">=&gt;</span> <span class="n">resource</span><span class="o">.</span><span class="n">id</span> <span class="p">},</span> <span class="ss">:status</span> <span class="o">=&gt;</span> <span class="ss">:created</span>
-</span><span class='line'>      <span class="k">return</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">destroy</span>
-</span><span class='line'>  <span class="c1"># expire auth token</span>
-</span><span class='line'>  <span class="vi">@user</span><span class="o">=</span><span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:authentication_token</span><span class="o">=&gt;</span><span class="n">params</span><span class="o">[</span><span class="ss">:auth_token</span><span class="o">]</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
-</span><span class='line'>  <span class="vi">@user</span><span class="o">.</span><span class="n">reset_authentication_token!</span>
-</span><span class='line'>  <span class="n">render</span> <span class="ss">:json</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:message</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;Session deleted.&quot;</span><span class="o">]</span> <span class="p">},</span>  <span class="ss">:success</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">:status</span> <span class="o">=&gt;</span> <span class="ss">:ok</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>  
-</span><span class='line'><span class="k">def</span> <span class="nf">invalid_login_attempt</span>
-</span><span class='line'>  <span class="n">warden</span><span class="o">.</span><span class="n">custom_failure!</span>
-</span><span class='line'>  <span class="n">render</span> <span class="ss">:json</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:errors</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;Invalid email or password.&quot;</span><span class="o">]</span> <span class="p">},</span>  <span class="ss">:success</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">,</span> <span class="ss">:status</span> <span class="o">=&gt;</span> <span class="ss">:unauthorized</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<span class="keyword">def</span> <span class="function">destroy</span>
+    <span class="comment"># expire auth token</span>
+    <span class="instance-variable">@user</span>=<span class="constant">User</span>.where(<span class="symbol">:authentication_token</span>=&gt;params[<span class="symbol">:auth_token</span>]).first
+    <span class="instance-variable">@user</span>.reset_authentication_token!
+    render <span class="symbol">:json</span> =&gt; { <span class="symbol">:message</span> =&gt; [<span class="string"><span class="delimiter">&quot;</span><span class="content">Session deleted.</span><span class="delimiter">&quot;</span></span>] },  <span class="symbol">:success</span> =&gt; <span class="predefined-constant">true</span>, <span class="symbol">:status</span> =&gt; <span class="symbol">:ok</span>
+<span class="keyword">end</span>
+    
+<span class="keyword">def</span> <span class="function">invalid_login_attempt</span>
+    warden.custom_failure!
+    render <span class="symbol">:json</span> =&gt; { <span class="symbol">:errors</span> =&gt; [<span class="string"><span class="delimiter">&quot;</span><span class="content">Invalid email or password.</span><span class="delimiter">&quot;</span></span>] },  <span class="symbol">:success</span> =&gt; <span class="predefined-constant">false</span>, <span class="symbol">:status</span> =&gt; <span class="symbol">:unauthorized</span>
+<span class="keyword">end</span>
+</pre></div>
+</div>
+</div>
 
 <p>On login, we call @user.ensure_authentication_token! to make sure the user has a token saved.  You could also add this call to your User#create method to generate the token when the user is first created.</p>
 
@@ -169,305 +286,230 @@
 
 <p>The last piece of the puzzle is making sure you have sign_in and sign_out routes.  This should actually be a given if you have Devise set up correctly, but just to cover all the bases, a simple devise_for call in config/routes.rb will route /users/sign_in and /users/sign_out to the right places:</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">devise_for</span><span class="p">(</span><span class="ss">:users</span><span class="p">,</span> <span class="ss">:controllers</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:sessions</span> <span class="o">=&gt;</span> <span class="s2">&quot;sessions&quot;</span> <span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
+<div><div class="CodeRay">
+  <div class="code"><pre>devise_for(<span class="symbol">:users</span>, <span class="symbol">:controllers</span> =&gt; { <span class="symbol">:sessions</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">sessions</span><span class="delimiter">&quot;</span></span> })
+</pre></div>
+</div>
+</div>
 
+<div><div class="CodeRay">
+  <div class="code"><pre>$ rake routes
+user_session            POST     /users/sign_in(.:format)   sessions#create
+destroy_user_session    DELETE   /users/sign_out(.:format)  sessions#destroy
+</pre></div>
+</div>
+</div>
 
+<p>Now you should be able to test the backend via curl or an app like <a href="http://ditchnet.org/httpclient/">HTTPClient</a>.  Here’s a quick cheat sheet to test that everything’s working properly.  This assumes you’ve already created a user on the backend.  Obviously, replace “localhost:3000” with your test URL.</p>
 
+<div><div class="CodeRay">
+  <div class="code"><pre>curl http://localhost:3000/users/sign_in --data &quot;email=me@example.com&amp;password=secret&quot;
+# should return the token and user ID.
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rake routes
-</span><span class='line'>user_session          POST    /users/sign_in<span class="o">(</span>.:format<span class="o">)</span>  sessions#create
-</span><span class='line'>destroy_user_session  DELETE  /users/sign_out<span class="o">(</span>.:format<span class="o">)</span> sessions#destroy
-</span></code></pre></td></tr></table></div></figure>
+curl http://localhost:3000/a_protected_page
+# no token - should return 401 Unauthorized.
 
+curl http://localhost:3000/a_protected_page&amp;auth_token={token}
+# should return the requested information.
 
-<p>Now you should be able to test the backend via curl or an app like <a href="http://ditchnet.org/httpclient/">HTTPClient</a>.  Here&rsquo;s a quick cheat sheet to test that everything&rsquo;s working properly.  This assumes you&rsquo;ve already created a user on the backend.  Obviously, replace &ldquo;localhost:3000&rdquo; with your test URL.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>curl http://localhost:3000/users/sign_in --data <span class="s2">&quot;email=me@example.com&amp;password=secret&quot;</span>
-</span><span class='line'><span class="c"># should return the token and user ID.</span>
-</span><span class='line'>
-</span><span class='line'>curl http://localhost:3000/a_protected_page
-</span><span class='line'><span class="c"># no token - should return 401 Unauthorized.</span>
-</span><span class='line'>
-</span><span class='line'>curl http://localhost:3000/a_protected_page&amp;auth_token<span class="o">={</span>token<span class="o">}</span>
-</span><span class='line'><span class="c"># should return the requested information.</span>
-</span><span class='line'>
-</span><span class='line'>curl -x DELETE http://localhost:3000/users/sign_out&amp;auth_token<span class="o">={</span>token<span class="o">}</span>
-</span><span class='line'><span class="c"># should log out the user, changing the authentication token.</span>
-</span></code></pre></td></tr></table></div></figure>
-
+curl -x DELETE http://localhost:3000/users/sign_out&amp;auth_token={token}
+# should log out the user, changing the authentication token.
+</pre></div>
+</div>
+</div>
 
 <p>All good?  Now we just have to set it up so the front end knows how to play this game.</p>
 
-<h2><a id='frontend'>Part 2: The Front End</a></h2>
+<h2 id="a-idfrontendpart-2-the-front-enda"><a id="frontend">Part 2: The Front End</a></h2>
 
-<p>The front end does not have Devise installed.  We don’t need it, because the user and session models are so simple, almost stubs.  All they do is add a layer of abstraction to the API calls.  You could probably still use Devise to manage your sessions and templates, but since I&rsquo;m using custom sign in and registration templates, it felt like overkill.</p>
+<p>The front end does not have Devise installed.  We don’t need it, because the user and session models are so simple, almost stubs.  All they do is add a layer of abstraction to the API calls.  You could probably still use Devise to manage your sessions and templates, but since I’m using custom sign in and registration templates, it felt like overkill.</p>
 
 <p>The user model on the front end is just an ActiveResource model whose site points to the backend URL.</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="ss">ActiveResource</span><span class="p">:</span><span class="ss">:Base</span>
-</span><span class='line'>  <span class="nb">self</span><span class="o">.</span><span class="n">site</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:3000&quot;</span>  <span class="c1"># your backend URL here</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">User</span> &lt; <span class="constant">ActiveResource</span>::<span class="constant">Base</span>
+    <span class="predefined-constant">self</span>.site = <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:3000</span><span class="delimiter">&quot;</span></span>  <span class="comment"># your backend URL here</span>
+<span class="keyword">end</span>
+</pre></div>
+</div>
+</div>
 
 <p>We have another custom Sessions Controller on the front end which is responsible for managing login and logout.  It sends the provided email and password to the backend and saves the returned token and user ID in the session cookie.</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">SessionsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">create</span>
-</span><span class='line'>      <span class="c1"># uses ActiveResource custom REST method</span>
-</span><span class='line'>      <span class="c1"># POST to @user.site/users/sign_in with params email/password and receive a token in return</span>
-</span><span class='line'>      <span class="n">response</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="ss">:sign_in</span><span class="p">,</span> <span class="ss">:email</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:username</span><span class="o">]</span><span class="p">,</span> <span class="ss">:password</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:password</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="s2">&quot;201&quot;</span>
-</span><span class='line'>          <span class="n">response_body</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
-</span><span class='line'>          <span class="n">session</span><span class="o">[</span><span class="ss">:auth_token</span><span class="o">]</span> <span class="o">=</span> <span class="n">response_body</span><span class="o">[</span><span class="s2">&quot;authentication_token&quot;</span><span class="o">]</span>
-</span><span class='line'>          <span class="n">session</span><span class="o">[</span><span class="ss">:current_user_id</span><span class="o">]</span> <span class="o">=</span> <span class="n">response_body</span><span class="o">[</span><span class="s2">&quot;user_id&quot;</span><span class="o">]</span>
-</span><span class='line'>      <span class="k">else</span>
-</span><span class='line'>          <span class="c1"># handle errors gracefully</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="n">redirect_to</span> <span class="n">root_url</span> <span class="ow">and</span> <span class="k">return</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">destroy</span>
-</span><span class='line'>      <span class="c1"># DELETE to @user.site/users/sign_out</span>
-</span><span class='line'>      <span class="n">response</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:sign_out</span><span class="p">)</span>
-</span><span class='line'>      <span class="c1"># TODO might want to check response to make sure it worked..</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="c1"># clean up our session and instance variables</span>
-</span><span class='line'>      <span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:auth_token</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:current_user_id</span><span class="p">)</span>
-</span><span class='line'>      <span class="vi">@current_user</span> <span class="o">=</span> <span class="kp">nil</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="n">redirect_to</span> <span class="n">root_url</span> <span class="ow">and</span> <span class="k">return</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">SessionsController</span> &lt; <span class="constant">ApplicationController</span>
 
+    <span class="keyword">def</span> <span class="function">create</span>
+        <span class="comment"># uses ActiveResource custom REST method</span>
+        <span class="comment"># POST to @user.site/users/sign_in with params email/password and receive a token in return</span>
+        response = <span class="constant">User</span>.post(<span class="symbol">:sign_in</span>, <span class="symbol">:email</span> =&gt; params[<span class="symbol">:username</span>], <span class="symbol">:password</span> =&gt; params[<span class="symbol">:password</span>])
+        <span class="keyword">if</span> response.code == <span class="string"><span class="delimiter">&quot;</span><span class="content">201</span><span class="delimiter">&quot;</span></span>
+            response_body = <span class="constant">JSON</span>.parse(response.body)
+            session[<span class="symbol">:auth_token</span>] = response_body[<span class="string"><span class="delimiter">&quot;</span><span class="content">authentication_token</span><span class="delimiter">&quot;</span></span>]
+            session[<span class="symbol">:current_user_id</span>] = response_body[<span class="string"><span class="delimiter">&quot;</span><span class="content">user_id</span><span class="delimiter">&quot;</span></span>]
+        <span class="keyword">else</span>
+            <span class="comment"># handle errors gracefully</span>
+        <span class="keyword">end</span>
+
+        redirect_to root_url <span class="keyword">and</span> <span class="keyword">return</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">destroy</span>
+        <span class="comment"># DELETE to @user.site/users/sign_out</span>
+        response = <span class="constant">User</span>.delete(<span class="symbol">:sign_out</span>)
+        <span class="comment"># TODO might want to check response to make sure it worked..</span>
+
+        <span class="comment"># clean up our session and instance variables</span>
+        session.delete(<span class="symbol">:auth_token</span>)
+        session.delete(<span class="symbol">:current_user_id</span>)
+        <span class="instance-variable">@current_user</span> = <span class="predefined-constant">nil</span>
+
+        redirect_to root_url <span class="keyword">and</span> <span class="keyword">return</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre></div>
+</div>
+</div>
 
 <p>Oh, know what else would be nice?  A helper method to see if we’re logged in and get the current user, similar to the one Devise provides.  This goes in the Application controller:</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">helper_method</span> <span class="ss">:current_user</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">protected</span>
-</span><span class='line'>      <span class="k">def</span> <span class="nf">current_user</span>
-</span><span class='line'>          <span class="vi">@_current_user</span> <span class="o">||=</span> <span class="n">session</span><span class="o">[</span><span class="ss">:current_user_id</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">session</span><span class="o">[</span><span class="ss">:current_user_id</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+<div><div class="CodeRay">
+  <div class="code"><pre>helper_method <span class="symbol">:current_user</span>
 
+    protected
+        <span class="keyword">def</span> <span class="function">current_user</span>
+            <span class="instance-variable">@_current_user</span> ||= session[<span class="symbol">:current_user_id</span>] &amp;&amp; <span class="constant">User</span>.find(session[<span class="symbol">:current_user_id</span>])
+        <span class="keyword">end</span>
+</pre></div>
+</div>
+</div>
 
 <p>So, cool, now you can refer to current_user from templates just like in Devise.</p>
 
-<h2><a id='part3'>Part 3. The Fiddly Bits</a></h2>
-
-<p>There&rsquo;s only one piece missing: appending the stored authentication token to every backend API call.  I didn&rsquo;t expect this to be the hard part, but&hellip; now it gets complicated.</p>
+<h2 id="a-idpart3part-3-the-fiddly-bitsa"><a id="part3">Part 3. The Fiddly Bits</a></h2>
+<p>There’s only one piece missing: appending the stored authentication token to every backend API call.  I didn’t expect this to be the hard part, but… now it gets complicated.</p>
 
 <p>Basically, ActiveResource doesn’t support this use case.  You can set an extra parameter on the object, but then ActiveResource will pass it wrapped up as part of the object, not on its own, which will break the Devise magic on the backend.</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vi">@user</span><span class="o">.</span><span class="n">auth_token</span> <span class="o">=</span> <span class="n">token</span>
-</span><span class='line'><span class="c1"># the backend gets {:user =&gt; {:email =&gt; &quot;me@example.com&quot;, ... :auth_token =&gt; token}}</span>
-</span></code></pre></td></tr></table></div></figure>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="instance-variable">@user</span>.auth_token = token
+<span class="comment"># the backend gets {:user =&gt; {:email =&gt; &quot;me@example.com&quot;, ... :auth_token =&gt; token}}</span>
+</pre></div>
+</div>
+</div>
 
+<p>Some ActiveResource methods <em>do</em> support passing extra parameters, but you can’t do it for every method, the format is inconsistent (and apparently undocumented), and we don’t want to type all that out all the time anyway…</p>
 
-<p>Some ActiveResource methods <em>do</em> support passing extra parameters, but you can&rsquo;t do it for every method, the format is inconsistent (and apparently undocumented), and we don&rsquo;t want to type all that out all the time anyway&hellip;</p>
+<div><div class="CodeRay">
+  <div class="code"><pre>&gt; <span class="constant">User</span>.delete(<span class="symbol">:sign_out</span>, <span class="symbol">:auth_token</span> =&gt; session[<span class="symbol">:auth_token</span>])
+<span class="comment"># that works, but...</span>
+&gt; g = <span class="constant">Group</span>.find(<span class="symbol">:first</span>, <span class="symbol">:params</span> =&gt; {<span class="symbol">:auth_token</span> =&gt; session[<span class="symbol">:auth_token</span>])
+<span class="comment"># hmm... that works too, but the format is different...</span>
+&gt; g.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">edited name</span><span class="delimiter">&quot;</span></span>
+&gt; g.save!
+<span class="constant">ActiveResource</span>::<span class="constant">UnauthorizedAccess</span>: <span class="constant">Failed</span>.  Response code = <span class="integer">401</span>.  Response message = <span class="constant">Unauthorized</span> .
+<span class="comment"># whoops... what about...</span>
+&gt; <span class="constant">Group</span>.site = <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:3030?auth_token=</span><span class="delimiter">&quot;</span></span> . session[<span class="symbol">:auth_token</span>]
+&gt; g.save!
+<span class="constant">ActiveResource</span>::<span class="constant">UnauthorizedAccess</span>: <span class="constant">Failed</span>.  Response code = <span class="integer">401</span>.  Response message = <span class="constant">Unauthorized</span> .
+<span class="comment"># OK, this is getting ugly...</span>
+&gt; g.save!(<span class="symbol">:auth_token</span> =&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">wh5xeZpwf6zHG9aHzy6M</span><span class="delimiter">&quot;</span></span>)
+<span class="key">ArgumentError</span>: wrong number of arguments (<span class="integer">1</span> <span class="keyword">for</span> <span class="integer">0</span>)
+<span class="comment"># fine then!</span>
+&gt; g.put(g)
+<span class="constant">URI</span>::<span class="constant">InvalidURIError</span>: bad URI(is <span class="keyword">not</span> URI?): <span class="regexp"><span class="delimiter">/</span><span class="content">groups</span><span class="delimiter">/</span></span><span class="integer">1</span>/<span class="comment">#&lt;Group:0x007fe0d4998880&gt;.json</span>
+<span class="comment">#  (╯°□°）╯︵ ┻━┻) </span>
+</pre></div>
+</div>
+</div>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&gt;</span> <span class="no">User</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:sign_out</span><span class="p">,</span> <span class="ss">:auth_token</span> <span class="o">=&gt;</span> <span class="n">session</span><span class="o">[</span><span class="ss">:auth_token</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># that works, but...</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="no">Group</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:first</span><span class="p">,</span> <span class="ss">:params</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:auth_token</span> <span class="o">=&gt;</span> <span class="n">session</span><span class="o">[</span><span class="ss">:auth_token</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># hmm... that works too, but the format is different...</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="n">g</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;edited name&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="n">g</span><span class="o">.</span><span class="n">save!</span>
-</span><span class='line'><span class="ss">ActiveResource</span><span class="p">:</span><span class="ss">:UnauthorizedAccess</span><span class="p">:</span> <span class="no">Failed</span><span class="o">.</span>  <span class="no">Response</span> <span class="n">code</span> <span class="o">=</span> <span class="mi">401</span><span class="o">.</span>  <span class="no">Response</span> <span class="n">message</span> <span class="o">=</span> <span class="no">Unauthorized</span> <span class="o">.</span>
-</span><span class='line'><span class="c1"># whoops... what about...</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="no">Group</span><span class="o">.</span><span class="n">site</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:3030?auth_token=&quot;</span> <span class="o">.</span> <span class="n">session</span><span class="o">[</span><span class="ss">:auth_token</span><span class="o">]</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="n">g</span><span class="o">.</span><span class="n">save!</span>
-</span><span class='line'><span class="ss">ActiveResource</span><span class="p">:</span><span class="ss">:UnauthorizedAccess</span><span class="p">:</span> <span class="no">Failed</span><span class="o">.</span>  <span class="no">Response</span> <span class="n">code</span> <span class="o">=</span> <span class="mi">401</span><span class="o">.</span>  <span class="no">Response</span> <span class="n">message</span> <span class="o">=</span> <span class="no">Unauthorized</span> <span class="o">.</span>
-</span><span class='line'><span class="c1"># OK, this is getting ugly...</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="n">g</span><span class="o">.</span><span class="n">save!</span><span class="p">(</span><span class="ss">:auth_token</span> <span class="o">=&gt;</span> <span class="s2">&quot;wh5xeZpwf6zHG9aHzy6M&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="ss">ArgumentError</span><span class="p">:</span> <span class="n">wrong</span> <span class="n">number</span> <span class="n">of</span> <span class="n">arguments</span> <span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># fine then!</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="n">g</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-</span><span class='line'><span class="ss">URI</span><span class="p">:</span><span class="ss">:InvalidURIError</span><span class="p">:</span> <span class="n">bad</span> <span class="no">URI</span><span class="p">(</span><span class="n">is</span> <span class="ow">not</span> <span class="no">URI</span><span class="sc">?)</span><span class="p">:</span> <span class="sr">/groups/</span><span class="mi">1</span><span class="o">/</span><span class="c1">#&lt;Group:0x007fe0d4998880&gt;.json</span>
-</span><span class='line'><span class="c1">#  (╯°□°）╯︵ ┻━┻) </span>
-</span></code></pre></td></tr></table></div></figure>
+<p>OK, look, forget it.  What we <em>really</em> want is a way to automatically send the authentication token, if we have it, with every single request – in a way that works transparently with ActiveResource, so it won’t matter if we’re doing a find, update, or delete.</p>
 
+<p>As it happens, you can overload ActiveResource’s basic HTTP authentication functionality to add the token to the headers on every request.  The catch is that we then have to add some more backend code, to pull the token out of the header and treat it like an ordinary param.</p>
 
-<p>OK, look, forget it.  What we <em>really</em> want is a way to automatically send the authentication token, if we have it, with every single request &mdash; in a way that works transparently with ActiveResource, so it won&rsquo;t matter if we&rsquo;re doing a find, update, or delete.</p>
-
-<p>As it happens, you can overload ActiveResource&rsquo;s basic HTTP authentication functionality to add the token to the headers on every request.  The catch is that we then have to add some more backend code, to pull the token out of the header and treat it like an ordinary param.</p>
-
-<p>Clear as mud?  Let&rsquo;s look at the code.</p>
+<p>Clear as mud?  Let’s look at the code.</p>
 
 <p>First, the front end.</p>
 
-<p>ActiveResource supports HTTP digest authentication: if you set a user and password on the ActiveResource object, they will get passed with every request, just like we want (albeit as a header, not a parameter).  But we don&rsquo;t want to set the <em>same</em> token for the entire class (since each user will have their own token), so instead of putting it in the model, we&rsquo;ll have to add a filter to set it each time.</p>
+<p>ActiveResource supports HTTP digest authentication: if you set a user and password on the ActiveResource object, they will get passed with every request, just like we want (albeit as a header, not a parameter).  But we don’t want to set the <em>same</em> token for the entire class (since each user will have their own token), so instead of putting it in the model, we’ll have to add a filter to set it each time.</p>
 
-<p>First, add the following function to the &ldquo;protected&rdquo; section of the Application controller:</p>
+<p>First, add the following function to the “protected” section of the Application controller:</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">set_auth_token</span>
-</span><span class='line'><span class="no">User</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">session</span><span class="o">[</span><span class="ss">:auth_token</span><span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">def</span> <span class="function">set_auth_token</span>
+<span class="constant">User</span>.user = session[<span class="symbol">:auth_token</span>]
+</pre></div>
+</div>
+</div>
 
 <p>Then, add a filter near the top, so we call this function for every request:</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before_filter</span> <span class="ss">:set_auth_token</span>
-</span></code></pre></td></tr></table></div></figure>
+<div><div class="CodeRay">
+  <div class="code"><pre>before_filter <span class="symbol">:set_auth_token</span>
+</pre></div>
+</div>
+</div>
 
+<p>If you examine the request sent to the backend, you’ll see that it now contains a “HTTP-AUTHORIZATION” header.  So far, so good.</p>
 
-<p>If you examine the request sent to the backend, you&rsquo;ll see that it now contains a &ldquo;HTTP-AUTHORIZATION&rdquo; header.  So far, so good.</p>
-
-<p>Side note: If you have multiple ActiveResource models interacting with the backend, you will have to set the user on each one.   For example: &ldquo;Group.user = session[:auth_token]&rdquo;.  The &ldquo;user&rdquo; (i.e., token) will then be sent for every Group request, such as Group.find, @group.save, etc.</p>
+<p><em>Side note: If you have multiple ActiveResource models interacting with the backend, you will have to set the user on each one.   For example: “Group.user = session[:auth_token]”.  The “user” (i.e., token) will then be sent for every Group request, such as Group.find, @group.save, etc.</em></p>
 
 <p>Now ActiveResource is sending the auth_token in the header, but the backend is expecting to find it as a GET or POST parameter.  So we need a little hack on the backend to fish it out, thus allowing Devise to continue transparently handling authentication.</p>
 
 <p>To the backend code!</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ApplicationController</span> <span class="o">&lt;</span> <span class="ss">ActionController</span><span class="p">:</span><span class="ss">:Base</span>
-</span><span class='line'>  <span class="n">prepend_before_filter</span> <span class="ss">:get_auth_token</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">private</span>
-</span><span class='line'>      <span class="k">def</span> <span class="nf">get_auth_token</span>
-</span><span class='line'>          <span class="k">if</span> <span class="n">auth_token</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:auth_token</span><span class="o">].</span><span class="n">blank?</span> <span class="o">&amp;&amp;</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">[</span><span class="s2">&quot;HTTP_AUTHORIZATION&quot;</span><span class="o">]</span>
-</span><span class='line'>              <span class="c1"># we&#39;re overloading ActiveResource&#39;s Basic HTTP authentication here, so we need to</span>
-</span><span class='line'>              <span class="c1"># do some unpacking of the auth token and re-save it as a parameter.</span>
-</span><span class='line'>              <span class="n">params</span><span class="o">[</span><span class="ss">:auth_token</span><span class="o">]</span> <span class="o">=</span> <span class="n">auth_token</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">chop</span>
-</span><span class='line'>          <span class="k">end</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">ApplicationController</span> &lt; <span class="constant">ActionController</span>::<span class="constant">Base</span>
+    prepend_before_filter <span class="symbol">:get_auth_token</span>
 
+    private
+        <span class="keyword">def</span> <span class="function">get_auth_token</span>
+            <span class="keyword">if</span> auth_token = params[<span class="symbol">:auth_token</span>].blank? &amp;&amp; request.headers[<span class="string"><span class="delimiter">&quot;</span><span class="content">HTTP_AUTHORIZATION</span><span class="delimiter">&quot;</span></span>]
+                <span class="comment"># we're overloading ActiveResource's Basic HTTP authentication here, so we need to</span>
+                <span class="comment"># do some unpacking of the auth token and re-save it as a parameter.</span>
+                params[<span class="symbol">:auth_token</span>] = auth_token.split.last.unpack(<span class="string"><span class="delimiter">'</span><span class="content">m</span><span class="delimiter">'</span></span>).first.chop
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre></div>
+</div>
+</div>
 
-<p>Yeah, ActiveResource is also encrypting that token, and then sending it in the HTTP digest format &ldquo;user:password&rdquo;.  Since we didn&rsquo;t set the password and used our auth_token as the user string, we&rsquo;re looking at &ldquo;encryptedtoken:&rdquo; instead.</p>
+<p>Yeah, ActiveResource is also encrypting that token, and then sending it in the HTTP digest format “user:password”.  Since we didn’t set the password and used our auth_token as the user string, we’re looking at “encryptedtoken:” instead.</p>
 
 <p>So we throw a little string manipulation dance party: split/last/unpack/first/chop, swing your partner, do-si-do!  This unencrypts the token, chops the colon off the end, and adds it to the params for every request so Devise can validate it.</p>
 
-<p>So that&rsquo;s it &mdash; feels like a bit of a hack, but seems to work pretty well in practice.  Has anyone else implemented a system like this?  I&rsquo;d love to hear how you did it!</p>
+<p>So that’s it – feels like a bit of a hack, but seems to work pretty well in practice.  Has anyone else implemented a system like this?  I’d love to hear how you did it!</p>
 
-<h2>Resources</h2>
+<h2 id="resources">Resources</h2>
 
-<h4>Documentation</h4>
+<h4 id="documentation">Documentation</h4>
 
 <ul>
-<li><a href="http://api.rubyonrails.org/classes/ActiveResource/Base.html">ActiveResource documentation</a></li>
-<li><a href="http://ofps.oreilly.com/titles/9780596521424/activeresource_id59243.html">Rails 3 In A Nutshell: ActiveResource</a></li>
-<li><a href="https://github.com/plataformatec/devise/wiki">Devise wiki</a></li>
+  <li><a href="http://api.rubyonrails.org/classes/ActiveResource/Base.html">ActiveResource documentation</a></li>
+  <li><a href="http://ofps.oreilly.com/titles/9780596521424/activeresource_id59243.html">Rails 3 In A Nutshell: ActiveResource</a></li>
+  <li><a href="https://github.com/plataformatec/devise/wiki">Devise wiki</a></li>
 </ul>
 
-
-<h4>Helpful examples</h4>
-
+<h4 id="helpful-examples">Helpful examples</h4>
 <p>Mad props to the following lovely folks who shared their code.  It was not always exactly what I needed, but it was a great help in figuring out how to tackle this problem.</p>
 
 <ul>
-<li><a href="https://github.com/plataformatec/devise/wiki/How-To:-Simple-Token-Authentication-Example">Two great examples on the Devise wiki</a></li>
-<li><a href="http://jessewolgamott.com/blog/2012/01/19/the-one-with-a-json-api-login-using-devise/">Jesse Wolgamott: The One With A JSON API Login Using Devise</a></li>
-<li><a href="http://www.justinbritten.com/work/2009/05/rails-api-authentication-using-restful-authentication/">Justin Britten.com: Rails API Authentication Using restful-authentication</a></li>
-<li><a href="http://www.eribium.org/blog/?p=77">eribium: RESTful Authentication</a></li>
+  <li><a href="https://github.com/plataformatec/devise/wiki/How-To:-Simple-Token-Authentication-Example">Two great examples on the Devise wiki</a></li>
+  <li><a href="http://jessewolgamott.com/blog/2012/01/19/the-one-with-a-json-api-login-using-devise/">Jesse Wolgamott: The One With A JSON API Login Using Devise</a></li>
+  <li><a href="http://www.justinbritten.com/work/2009/05/rails-api-authentication-using-restful-authentication/">Justin Britten.com: Rails API Authentication Using restful-authentication</a></li>
+  <li><a href="http://www.eribium.org/blog/?p=77">eribium: RESTful Authentication</a></li>
 </ul>
 
-
-<h4>Alternate Solutions</h4>
-
-<p>Stuff that didn&rsquo;t work for me, but might work for you.</p>
+<h4 id="alternate-solutions">Alternate Solutions</h4>
+<p>Stuff that didn’t work for me, but might work for you.</p>
 
 <ul>
-<li><a href="http://blog.shuntyard.co.za/2011/10/adding-custom-authentication-strategy.html">Using a custom Warden authentication strategy</a></li>
-<li><a href="http://www.railsatwork.com/2010/10/implementing-devise-extensions.html">Extending Devise</a></li>
-<li><a href="https://github.com/intridea/omniauth/wiki/List-of-Strategies">Using OmniAuth with the Identity strategy</a></li>
-<li><a href="http://stackoverflow.com/questions/6046705/add-api-key-on-every-request-with-rack-middleware">Add an API key to every request using Rack middleware</a></li>
+  <li><a href="http://blog.shuntyard.co.za/2011/10/adding-custom-authentication-strategy.html">Using a custom Warden authentication strategy</a></li>
+  <li><a href="http://www.railsatwork.com/2010/10/implementing-devise-extensions.html">Extending Devise</a></li>
+  <li><a href="https://github.com/intridea/omniauth/wiki/List-of-Strategies">Using OmniAuth with the Identity strategy</a></li>
+  <li><a href="http://stackoverflow.com/questions/6046705/add-api-key-on-every-request-with-rack-middleware">Add an API key to every request using Rack middleware</a></li>
 </ul>
-
 ]]></content>
   </entry>
   
@@ -476,264 +518,238 @@
     <link href="http://blog.codebykat.com/2011/10/03/rubyconf-recap/"/>
     <updated>2011-10-03T10:58:00-07:00</updated>
     <id>http://blog.codebykat.com/2011/10/03/rubyconf-recap</id>
-    <content type="html"><![CDATA[<p><a href="http://rubyconf.org/">RubyConf 2011</a> was my first technical conference
-as a Rubyist, and it was an absolute blast.  I was afraid that many of
-the talks would be too advanced, since I&rsquo;ve been writing Ruby for less
-than a year, but on the whole there was a good mix for programmers at
-any level.  Not only did I learn a ton, I got to spend three days
-rubbing elbows with a bunch of smart, inspiring and genuinely nice
-folks. It was great to put faces to some of the names I&rsquo;d seen online
-and get to hear about what everyone&rsquo;s working on.  As my first real dose
+    <content type="html"><![CDATA[<p><a href="http://rubyconf.org/">RubyConf 2011</a> was my first technical conference 
+as a Rubyist, and it was an absolute blast.  I was afraid that many of 
+the talks would be too advanced, since I’ve been writing Ruby for less 
+than a year, but on the whole there was a good mix for programmers at 
+any level.  Not only did I learn a ton, I got to spend three days 
+rubbing elbows with a bunch of smart, inspiring and genuinely nice 
+folks. It was great to put faces to some of the names I’d seen online 
+and get to hear about what everyone’s working on.  As my first real dose 
 of the Ruby community, the experience was nothing but positive.</p>
 
 <!--more-->
 
-
 <p>My main takeaways from the conference: I want to be more involved with
-the Ruby/open-source community, my tests are terrible (well, that&rsquo;s not really news),
+the Ruby/open-source community, my tests are terrible (well, that’s not really news),
 and concurrency/threading is a hot topic in the Ruby world right now.  Oh,
 and now I understand what these variants everyone is always talking about (JRuby,
 Rubinius, etc.) actually are!</p>
 
-<p>The three days of <a href="http://rubyconf.org/schedule">talks</a> ran the gamut
-from general to specialized, from little toy programs to big
-multi-person projects. What follows is not exhaustive by any means: just
-my notes, what I found the most interesting and memorable.  (All the
-talks were recorded by <a href="http://confreaks.net/">confreaks</a>; videos should
-be available <a href="http://confreaks.net/events/rubyconf2011">here</a> sometime
+<p>The three days of <a href="http://rubyconf.org/schedule">talks</a> ran the gamut 
+from general to specialized, from little toy programs to big 
+multi-person projects. What follows is not exhaustive by any means: just 
+my notes, what I found the most interesting and memorable.  (All the 
+talks were recorded by <a href="http://confreaks.net/">confreaks</a>; videos should 
+be available <a href="http://confreaks.net/events/rubyconf2011">here</a> sometime 
 soon.)</p>
 
-<h2>Zach Holman: <a href="http://rubyconf.org/presentations/62">How Github Uses Github to Build Github</a></h2>
+<h2 id="zach-holman-how-github-uses-github-to-build-githubhttprubyconforgpresentations62">Zach Holman: <a href="http://rubyconf.org/presentations/62">How Github Uses Github to Build Github</a></h2>
 
-<p>Zach Holman&rsquo;s talk was mainly about Github&rsquo;s corporate culture and the
-organic, <a href="http://blog.steveklabnik.com/2011/10/01/github-is-anarchy-for-programmers.html">slightly anarchistic</a>
-process (or, if you prefer, anti-process) they use to manage the
+<p>Zach Holman’s talk was mainly about Github’s corporate culture and the 
+organic, <a href="http://blog.steveklabnik.com/2011/10/01/github-is-anarchy-for-programmers.html">slightly anarchistic</a> 
+process (or, if you prefer, anti-process) they use to manage the 
 <a href="http://github.com/">Github</a> codebase.
-Zach talked about
-his experiences with a team that works asynchronously: geographically
-and temporally separate, without deadlines, meetings, interruptions, or
+Zach talked about 
+his experiences with a team that works asynchronously: geographically 
+and temporally separate, without deadlines, meetings, interruptions, or 
 any other sort of unnecessary overhead.
-Quite a bit of interesting stuff
-here &mdash; it&rsquo;d definitely be worth watching the video.</p>
+Quite a bit of interesting stuff 
+here – it’d definitely be worth watching the video.</p>
 
-<p>As appealing as all of this sounds, as with any process, what works well
-for one specific group wouldn&rsquo;t necessarily translate well to a
-different setting.  Someone in the audience did point out that Github
-doesn&rsquo;t have any clients, and thus can be more flexible about deadlines.
-I do think that it hits the nail on the head in terms of developer
-motivation and efficiency, so even if you can&rsquo;t adopt it wholesale, it&rsquo;s
-worth looking at to see if any of the pieces might be a good fit.  If
-nothing else, I&rsquo;m sure that offering so much autonomy ensures that
+<p>As appealing as all of this sounds, as with any process, what works well 
+for one specific group wouldn’t necessarily translate well to a 
+different setting.  Someone in the audience did point out that Github 
+doesn’t have any clients, and thus can be more flexible about deadlines. 
+I do think that it hits the nail on the head in terms of developer 
+motivation and efficiency, so even if you can’t adopt it wholesale, it’s 
+worth looking at to see if any of the pieces might be a good fit.  If 
+nothing else, I’m sure that offering so much autonomy ensures that 
 Github attracts some of the best developers out there.</p>
 
-<p>Pikimal developers actually do work asynchronously quite a bit (we have
-a persistent chatroom, somewhat flexible hours and many opportunities to
-work remotely).  If we could figure out how to adapt it to our workflow,
-I think there might be something to be learned from the Github
-treatment of deadlines and scheduling.  As for deployment, I would <em>definitely</em> love to make
-our continuous integration and build process more robust, as it&rsquo;s a big
+<p>Pikimal developers actually do work asynchronously quite a bit (we have 
+a persistent chatroom, somewhat flexible hours and many opportunities to 
+work remotely).  If we could figure out how to adapt it to our workflow, 
+I think there might be something to be learned from the Github 
+treatment of deadlines and scheduling.  As for deployment, I would <em>definitely</em> love to make 
+our continuous integration and build process more robust, as it’s a big
 source of developer stress for us right now.</p>
 
-<h4>LINKS</h4>
+<h4 id="links">LINKS</h4>
 
 <ul>
-<li><a href="http://zachholman.com/talk/how-github-uses-github-to-build-github">Zach&rsquo;s slides</a></li>
-<li>He also has some excellent <a href="http://zachholman.com/posts/how-github-works/">blog posts</a> on Github&rsquo;s workflow</li>
-<li><a href="http://scottchacon.com/2011/08/31/github-flow.html">Scott Chacon on why Github doesn&rsquo;t use git-flow</a></li>
-<li><a href="http://www.43folders.com/2009/04/28/priorities">Merlin Mann on priorities</a></li>
+  <li><a href="http://zachholman.com/talk/how-github-uses-github-to-build-github">Zach’s slides</a></li>
+  <li>He also has some excellent <a href="http://zachholman.com/posts/how-github-works/">blog posts</a> on Github’s workflow</li>
+  <li><a href="http://scottchacon.com/2011/08/31/github-flow.html">Scott Chacon on why Github doesn’t use git-flow</a></li>
+  <li><a href="http://www.43folders.com/2009/04/28/priorities">Merlin Mann on priorities</a></li>
 </ul>
 
+<h2 id="rob-sanheim-how-getting-buff-can-make-you-a-better-rubyisthttprubyconforgpresentations49">Rob Sanheim: <a href="http://rubyconf.org/presentations/49">How Getting Buff Can Make You a Better Rubyist</a></h2>
 
-<h2>Rob Sanheim: <a href="http://rubyconf.org/presentations/49">How Getting Buff Can Make You a Better Rubyist</a></h2>
-
-<p>Rob Sanheim has this outlandish idea that taking good care of
-yourself will make you a better programmer.  He&rsquo;s preaching to the
-choir, as far as I&rsquo;m concerned; I&rsquo;ve thought for some time that the
-hacker myth (i.e., that there&rsquo;s some kind of merit in coding night and day,
-fueled by coffee and Red Bull) can&rsquo;t die soon enough.  As Rob said,
-&ldquo;We need to move away from a culture where working crazy hours and
-pulling all-nighters is [considered] a good way to get things done.&rdquo;</p>
+<p>Rob Sanheim has this outlandish idea that taking good care of 
+yourself will make you a better programmer.  He’s preaching to the 
+choir, as far as I’m concerned; I’ve thought for some time that the 
+hacker myth (i.e., that there’s some kind of merit in coding night and day, 
+fueled by coffee and Red Bull) can’t die soon enough.  As Rob said, 
+“We need to move away from a culture where working crazy hours and 
+pulling all-nighters is [considered] a good way to get things done.”</p>
 
 <p>I love that he not only talked about his own experience in finding more
 balance in his life, but provided some real data (neuroscience and
 statistics) about why this is a great idea.
 This has been my experience as well: the time you lose in taking better
 care of yourself is more than recovered in better focus, more energy,
-more creativity and just improved sanity generally.  (After this talk, <a href="http://twitter.com/#!/dddagradi">@dddagradi</a> and I decided to officially start <a href="http://www.c25k.com/">c25k</a>.  We&rsquo;ve done the first two runs already!)</p>
+more creativity and just improved sanity generally.  (After this talk, <a href="http://twitter.com/#!/dddagradi">@dddagradi</a> and I decided to officially start <a href="http://www.c25k.com/">c25k</a>.  We’ve done the first two runs already!)</p>
 
-<p>Also: Getting everyone up to do &ldquo;programmer yoga&rdquo; at the beginning of the talk?  Total win.</p>
+<p>Also: Getting everyone up to do “programmer yoga” at the beginning of the talk?  Total win.</p>
 
-<h4>LINKS</h4>
-
+<h4 id="links-1">LINKS</h4>
 <ul>
-<li><a href="http://dl.dropbox.com/u/7316160/rubyconf-2011-how-getting-buff-making-you-better-rubyist.pdf">Rob&rsquo;s slides</a></li>
-<li><a href="https://gist.github.com/1251491">Sexy Yoga Time</a></li>
-<li><a href="http://www.fastcompany.com/1783263/the-creative-brain-on-exercise">The Creative Brain on Exercise</a></li>
+  <li><a href="http://dl.dropbox.com/u/7316160/rubyconf-2011-how-getting-buff-making-you-better-rubyist.pdf">Rob’s slides</a></li>
+  <li><a href="https://gist.github.com/1251491">Sexy Yoga Time</a></li>
+  <li><a href="http://www.fastcompany.com/1783263/the-creative-brain-on-exercise">The Creative Brain on Exercise</a></li>
 </ul>
 
-
-<h2>Steven Harms: <a href="http://rubyconf.org/presentations/56">Practical Metaprogramming</a> vs. Joshua Ballanco: <a href="http://rubyconf.org/presentations/30">Keeping Ruby Reasonable</a></h2>
+<h2 id="steven-harms-practical-metaprogramminghttprubyconforgpresentations56-vs-joshua-ballanco-keeping-ruby-reasonablehttprubyconforgpresentations30">Steven Harms: <a href="http://rubyconf.org/presentations/56">Practical Metaprogramming</a> vs. Joshua Ballanco: <a href="http://rubyconf.org/presentations/30">Keeping Ruby Reasonable</a></h2>
 
 <p>I loved these two talks because they showcased some of the interesting (and sometimes worrying) things
 that can happen with a language like Ruby that allows you to dynamically
 add or override function bindings in the running environment.</p>
 
 <p>Steven Harms used these powers for good, illustrating his talk with the real-life
-example of a program that models Latin verbs.  He made the concept of &ldquo;metaprogramming&rdquo;
+example of a program that models Latin verbs.  He made the concept of “metaprogramming”
 seem much less scary and mysterious, and provided a beautifully-organized taxonomy of
 metaprogramming patterns.  I did find his project extra interesting because learning Japanese is
 a (sadly somewhat neglected) side project of mine, so I always love talking about
 modeling human languages in terms of code.</p>
 
 <p>Joshua Ballanc, on the other hand, had some very funny examples to illustrate how this powerful ability
-can be used in problematic ways, and why this can be bad (&ldquo;in this variation [of first-class environments],
-the user simply cannot reason about his code&rdquo;).</p>
+can be used in problematic ways, and why this can be bad (“in this variation [of first-class environments],
+the user simply cannot reason about his code”).</p>
 
-<h4>LINKS</h4>
+<h4 id="links-2">LINKS</h4>
 
 <ul>
-<li><a href="http://stevengharms.com/?p=2335">Steven&rsquo;s page with slides and resources</a></li>
-<li><a href="http://ducktypo.blogspot.com/2010/08/metaprogramming-spell-book.html">Metaprogramming Spell Book</a></li>
-<li><a href="http://slidesha.re/oYtC45">Joshua&rsquo;s slides</a></li>
-<li><a href="http://funcall.blogspot.com/2009/09/first-class-environments.html">Jrm on the dangers of first-class environments</a></li>
+  <li><a href="http://stevengharms.com/?p=2335">Steven’s page with slides and resources</a></li>
+  <li><a href="http://ducktypo.blogspot.com/2010/08/metaprogramming-spell-book.html">Metaprogramming Spell Book</a></li>
+  <li><a href="http://slidesha.re/oYtC45">Joshua’s slides</a></li>
+  <li><a href="http://funcall.blogspot.com/2009/09/first-class-environments.html">Jrm on the dangers of first-class environments</a></li>
 </ul>
 
+<h2 id="jamis-buck-algorithms-is-not-a-four-letter-wordhttprubyconforgpresentations24">Jamis Buck: <a href="http://rubyconf.org/presentations/24">“Algorithms” is not a Four-Letter Word</a></h2>
 
-<h2>Jamis Buck: <a href="http://rubyconf.org/presentations/24">&ldquo;Algorithms&rdquo; is not a Four-Letter Word</a></h2>
-
-<p>Jamis&#8217; <a href="http://bit.ly/pghOIG">hand-drawn slides</a> are amazing and
-adorable.  Seriously, go play with them, they&rsquo;re even interactive!  While
+<p>Jamis’ <a href="http://bit.ly/pghOIG">hand-drawn slides</a> are amazing and 
+adorable.  Seriously, go play with them, they’re even interactive!  While
 the concepts will be old hat for anyone with a CS background,
-I loved the sense of playfulness and exploration.  This is what programming
-is all about.  (Also, I kind of want to write some maze-generation code
+I loved the sense of playfulness and exploration.  This is what programming 
+is all about.  (Also, I kind of want to write some maze-generation code 
 now.)</p>
 
-<h2>Dr Nic Williams: <a href="http://rubyconf.org/presentations/18">Threading vs Evented</a></h2>
+<h2 id="dr-nic-williams-threading-vs-eventedhttprubyconforgpresentations18">Dr Nic Williams: <a href="http://rubyconf.org/presentations/18">Threading vs Evented</a></h2>
 
-<p>This is a talk I walked into wondering whether I&rsquo;d understand anything,
-but it was actually quite interesting (and funny; I swear Dr Nic is
-secretly a stand-up comedian).  His slides don&rsquo;t seem to be online, but
-I&rsquo;ll be sure to link the video once it&rsquo;s up.  Lots of great info about
-multithreading in Ruby, best practices and some of the underlying
+<p>This is a talk I walked into wondering whether I’d understand anything, 
+but it was actually quite interesting (and funny; I swear Dr Nic is 
+secretly a stand-up comedian).  His slides don’t seem to be online, but 
+I’ll be sure to link the video once it’s up.  Lots of great info about 
+multithreading in Ruby, best practices and some of the underlying 
 implementation issues.</p>
 
-<p>The basic takeaway was that, currently, the <em>only</em> way to get good
-performance with multithreading in Ruby is with the stack of nginx +
-Trinidad + JRuby. I was surprised to learn that the reference Ruby
+<p>The basic takeaway was that, currently, the <em>only</em> way to get good 
+performance with multithreading in Ruby is with the stack of nginx + 
+Trinidad + JRuby. I was surprised to learn that the reference Ruby 
 implementation is <del>single-threaded</del> often limited to a single
-Ruby thread per processor<super>*</super> (and, judging from some of the Q&amp;As,
+Ruby thread per processor<super>*</super> (and, judging from some of the Q&amp;As, 
 this may not be fixed anytime soon).  Word on the street, by the way, is
 that Rubinius is working on better concurrency support as well.</p>
 
 <p><small>(<super>*</super>Updated with clarification from @merbist and @steveklabnik.  Thanks guys!)</small></p>
 
-<p>Interesting side note: I looked up the GIL on Wikipedia
+<p>Interesting side note: I looked up the GIL on Wikipedia 
 and learned that Python is in exactly the same situation (the vanilla C implementation
-has a GIL but the Java-based version &mdash; in Python&rsquo;s case, Jython &mdash; does
+has a GIL but the Java-based version – in Python’s case, Jython – does
 not).</p>
 
-<h4>LINKS</h4>
-
+<h4 id="links-3">LINKS</h4>
 <ul>
-<li><a href="http://jruby.org/">JRuby</a></li>
-<li><a href="http://rubygems.org/gems/trinidad">Trinidad</a></li>
-<li><a href="http://en.wikipedia.org/wiki/Global_Interpreter_Lock">Wikipedia: Global Interpreter Lock</a></li>
+  <li><a href="http://jruby.org/">JRuby</a></li>
+  <li><a href="http://rubygems.org/gems/trinidad">Trinidad</a></li>
+  <li><a href="http://en.wikipedia.org/wiki/Global_Interpreter_Lock">Wikipedia: Global Interpreter Lock</a></li>
 </ul>
 
+<h2 id="steve-klabnik-shoeshttprubyconforgpresentations55--ron-evans-kidsrubyhttprubyconforgpresentations51">Steve Klabnik: <a href="http://rubyconf.org/presentations/55">Shoes</a> + Ron Evans: <a href="http://rubyconf.org/presentations/51">KidsRuby</a></h2>
 
-<h2>Steve Klabnik: <a href="http://rubyconf.org/presentations/55">Shoes</a> + Ron Evans: <a href="http://rubyconf.org/presentations/51">KidsRuby</a></h2>
-
-<p>Maybe it&rsquo;s just the years I spent working for various universities, but
-I&rsquo;m always interested in teaching tools and serious games. I think
-projects like HacketyHack and KidsRuby are a great way to make
-programming more accessible to the next generation, many of whom don&rsquo;t have
+<p>Maybe it’s just the years I spent working for various universities, but 
+I’m always interested in teaching tools and serious games. I think 
+projects like HacketyHack and KidsRuby are a great way to make 
+programming more accessible to the next generation, many of whom don’t have
 access to any kind of formal CS education.
-Both Steve Klabnik and Ron Evans emphasize (and exemplify) the passion and
+Both Steve Klabnik and Ron Evans emphasize (and exemplify) the passion and 
 natural curiosity that is so fundamental to our vocation as coders.</p>
 
-<h4>LINKS</h4>
-
+<h4 id="links-4">LINKS</h4>
 <ul>
-<li><a href="http://shoesrb.com/">Shoes</a></li>
-<li><a href="http://hackety-hack.com/">HacketyHack</a></li>
-<li><a href="http://kidsruby.com/">KidsRuby</a></li>
+  <li><a href="http://shoesrb.com/">Shoes</a></li>
+  <li><a href="http://hackety-hack.com/">HacketyHack</a></li>
+  <li><a href="http://kidsruby.com/">KidsRuby</a></li>
 </ul>
 
+<h2 id="gregory-moeck-why-you-dont-get-mock-objectshttprubyconforgpresentations21--chris-parsons-your-tests-are-lying-to-youhttprubyconforgpresentations12">Gregory Moeck: <a href="http://rubyconf.org/presentations/21">Why You Don’t Get Mock Objects</a> + Chris Parsons: <a href="http://rubyconf.org/presentations/12">Your Tests are Lying to You</a></h2>
 
-<h2>Gregory Moeck: <a href="http://rubyconf.org/presentations/21">Why You Don&rsquo;t Get Mock Objects</a> + Chris Parsons: <a href="http://rubyconf.org/presentations/12">Your Tests are Lying to You</a></h2>
+<p>I admit it: my test-fu is weak.  I don’t write tests as often as I 
+should, and when I do write them, I often copy-and-paste bits and pieces 
+of other tests without fully understanding how they work.  So Gregory 
+Moeck’s discussion of mock objects, including some simple rules for how 
+to use them, was very enlightening.  His slides were full of pithy 
+little rules of thumb like “Mock roles, not objects”, “Mocks assert on 
+messages”, and “Only mock types you own”.</p>
 
-<p>I admit it: my test-fu is weak.  I don&rsquo;t write tests as often as I
-should, and when I do write them, I often copy-and-paste bits and pieces
-of other tests without fully understanding how they work.  So Gregory
-Moeck&rsquo;s discussion of mock objects, including some simple rules for how
-to use them, was very enlightening.  His slides were full of pithy
-little rules of thumb like &ldquo;Mock roles, not objects&rdquo;, &ldquo;Mocks assert on
-messages&rdquo;, and &ldquo;Only mock types you own&rdquo;.</p>
-
-<p>I actually missed the other testing talk, &ldquo;Your Tests are Lying to You&rdquo;,
-but I heard a lot about it after the fact, so I looked up and enjoyed
-the slides. I&rsquo;m putting them here, too, for your edification and to
+<p>I actually missed the other testing talk, “Your Tests are Lying to You”, 
+but I heard a lot about it after the fact, so I looked up and enjoyed 
+the slides. I’m putting them here, too, for your edification and to 
 remind myself to check out the video when it gets posted.</p>
 
-<h4>LINKS</h4>
-
+<h4 id="links-5">LINKS</h4>
 <ul>
-<li><a href="http://speakerdeck.com/u/gmoeck/p/why-you-dont-get-mock-objects">Gregory&rsquo;s slides</a></li>
-<li><a href="http://en.wikipedia.org/wiki/Single_responsibility_principle">Wikipedia: Single Responsibility Principle</a></li>
-<li><a href="http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1317313536&amp;sr=1-1">Growing Object-Oriented Software, Guided by Tests</a></li>
-<li><a href="http://speakerdeck.com/u/chrismdp/p/your-tests-are-lying-to-you">Chris&#8217; slides</a></li>
+  <li><a href="http://speakerdeck.com/u/gmoeck/p/why-you-dont-get-mock-objects">Gregory’s slides</a></li>
+  <li><a href="http://en.wikipedia.org/wiki/Single_responsibility_principle">Wikipedia: Single Responsibility Principle</a></li>
+  <li><a href="http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1317313536&amp;sr=1-1">Growing Object-Oriented Software, Guided by Tests</a></li>
+  <li><a href="http://speakerdeck.com/u/chrismdp/p/your-tests-are-lying-to-you">Chris’ slides</a></li>
 </ul>
 
-
-<h2>QUOTABLE</h2>
-
+<h2 id="quotable">QUOTABLE</h2>
 <blockquote>
 TDD (Twitter-Driven Development): Push to production and see if people are complaining about it.<br />
 <cite><a href="http://twitter.com/#!/holman">Zach Holman</a></cite>
 </blockquote>
-
-
-
 
 <blockquote>
 Every day that I don&#8217;t type Thread.new is a day that my app might work.<br />
 <cite><a href="http://twitter.com/#!/drnic">Dr Nic</a>, on the value of abstracting away multithreading code</cite>
 </blockquote>
 
-
-
-
 <blockquote>
 Write-only code: Code you write once and can never read again.<br />
 <cite>unknown (possibly Chris Parsons?), via <a href="http://twitter.com/#!/davidfurber/status/119899372325572608">@davidfurber</a></cite>
 </blockquote>
-
-
-
 
 <blockquote>
 Candy Machine Interfaces: APIs that make it too easy to do the wrong thing.<br />
 <cite><a href="http://twitter.com/#!/jimweirich">Jim Weirich</a></cite>
 </blockquote>
 
-
-<h2>NEW BOOKMARKS</h2>
-
+<h2 id="new-bookmarks">NEW BOOKMARKS</h2>
 <ul>
-<li><a href="http://rubyrogues.com/">Ruby Rogues podcast</a></li>
-<li><a href="http://rubykoans.com/">Ruby Koans</a></li>
-<li><a href="http://railsplugins.org">railsplugins.org</a></li>
+  <li><a href="http://rubyrogues.com/">Ruby Rogues podcast</a></li>
+  <li><a href="http://rubykoans.com/">Ruby Koans</a></li>
+  <li><a href="http://railsplugins.org">railsplugins.org</a></li>
 </ul>
 
-
-<h2>ALSO RECOMMEND</h2>
-
+<h2 id="also-recommend">ALSO RECOMMEND</h2>
 <ul>
-<li><a href="http://greengoddessnola.com">The Green Goddess</a>.  Seriously, if you&rsquo;re ever in New Orleans, you should go there.  The food is delicious and the atmosphere is completely charming.</li>
-<li><a href="http://www.astralproject.com/">Astral Project</a>.  Authentic New Orleans jazz (I hear their sax player is quite good).</li>
-<li><a href="http://www.youtube.com/watch?v=IfeyUGZt8nk">This</a>.  You&rsquo;re welcome.</li>
+  <li><a href="http://greengoddessnola.com">The Green Goddess</a>.  Seriously, if you’re ever in New Orleans, you should go there.  The food is delicious and the atmosphere is completely charming.</li>
+  <li><a href="http://www.astralproject.com/">Astral Project</a>.  Authentic New Orleans jazz (I hear their sax player is quite good).</li>
+  <li><a href="http://www.youtube.com/watch?v=IfeyUGZt8nk">This</a>.  You’re welcome.</li>
 </ul>
-
 ]]></content>
   </entry>
   
