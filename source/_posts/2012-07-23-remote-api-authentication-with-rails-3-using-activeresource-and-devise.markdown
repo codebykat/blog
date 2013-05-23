@@ -42,60 +42,73 @@ The [token_authenticatable](http://rdoc.info/github/plataformatec/devise/master/
 First, we need a new database column.  Older versions of Devise had the t.token_authenticatable shorthand for this, but that is now deprecated, so we need to set up the column and index manually.
 
 Create a new database migration:
-    class AddTokensToUsers < ActiveRecord::Migration
-      def change
-        change_table :users do |t|
-          t.string :authentication_token
-        end
-        add_index  :users, :authentication_token, :unique => true
-      end
-    end
+
+~~~
+class AddTokensToUsers < ActiveRecord::Migration
+	def change
+		change_table :users do |t|
+			t.string :authentication_token
+		end
+		add_index  :users, :authentication_token, :unique => true
+	end
+end
+~~~
+{:lang="ruby"}
 
 Tell Devise to use tokens for the User model by adding :token_authenticatable to the devise line in your model, e.g.:
-    class User < ActiveRecord::Base
-    devise :database_authenticatable, :registerable, :token_authenticatable,
-           :recoverable, :rememberable, :trackable, :validatable
+
+	class User < ActiveRecord::Base
+		devise :database_authenticatable, :registerable, :token_authenticatable,
+	    	   :recoverable, :rememberable, :trackable, :validatable
+{:lang="ruby"}
 
 Then a few small changes to the Devise config (config/initializers/devise.rb):
-    config.skip_session_storage = [:http_auth, :token_auth]
-    config.token_authentication_key = :auth_token
+
+	config.skip_session_storage = [:http_auth, :token_auth]
+	config.token_authentication_key = :auth_token
+{:lang="ruby"}
 
 The first line tells Devise not to store the user in the session.
 
 The second line changes what you’re going to call your authentication token parameter -- I changed mine to "auth_token" because I didn't want to be typing "authentication_token" all the time, but you can call it whatever you want (or leave it as the default).
 
 Now any protected content needs to be wrapped with a filter that tells it to deny access if the user is not authenticated.  In my Users controller, I added:
-    before_filter :authenticate_user!, :except => [:create, :new, :show]
+
+	before_filter :authenticate_user!, :except => [:create, :new, :show]
+{:lang="ruby"}
 
 So now we have all the infrastructure in place.  Next, we need a way to actually authenticate the user.  That's the job of the Sessions controller, which checks a given username and password and, if they're valid, returns a token (as well as the ID of the user in question).  Note that, since there’s no session-based sign-in on the backend, we never call Devise's sign_in/sign_out methods.  We're just validating the password, making sure the user has an auth token generated, and returning it.
 
 (In some sense, a user is "signed in" to the backend as long as they have a valid authentication token.  If you want, you can expire this token after some period of time instead of having it stick around indefinitely.  You could also reset it after a certain number of uses.)
 
-	SessionsController:
-		def create
-			build_resource
-			resource = User.find_for_database_authentication(:email => params[:email])
-			return invalid_login_attempt unless resource
+~~~
+SessionsController:
+	def create
+		build_resource
+		resource = User.find_for_database_authentication(:email => params[:email])
+		return invalid_login_attempt unless resource
 			
-			if resource.valid_password?(params[:password])
+		if resource.valid_password?(params[:password])
 			resource.ensure_authentication_token!  #make sure the user has a token generated
 			render :json => { :authentication_token => resource.authentication_token, :user_id => resource.id }, :status => :created
-			return
-		end
+		return
 	end
+end
+
+def destroy
+	# expire auth token
+	@user=User.where(:authentication_token=>params[:auth_token]).first
+	@user.reset_authentication_token!
+	render :json => { :message => ["Session deleted."] },  :success => true, :status => :ok
+end
 	
-	def destroy
-		# expire auth token
-		@user=User.where(:authentication_token=>params[:auth_token]).first
-		@user.reset_authentication_token!
-		render :json => { :message => ["Session deleted."] },  :success => true, :status => :ok
-	end
-	
-	def invalid_login_attempt
-		warden.custom_failure!
-		render :json => { :errors => ["Invalid email or password."] },  :success => false, :status => :unauthorized
-	end
-	
+def invalid_login_attempt
+	warden.custom_failure!
+	render :json => { :errors => ["Invalid email or password."] },  :success => false, :status => :unauthorized
+end
+~~~
+{:lang="ruby"}
+
 On login, we call @user.ensure_authentication_token! to make sure the user has a token saved.  You could also add this call to your User#create method to generate the token when the user is first created.
 
 When the session is destroyed, we call @user.reset_authentication_token! to expire the current token and generate a new one.
@@ -103,10 +116,12 @@ When the session is destroyed, we call @user.reset_authentication_token! to expi
 The last piece of the puzzle is making sure you have sign_in and sign_out routes.  This should actually be a given if you have Devise set up correctly, but just to cover all the bases, a simple devise_for call in config/routes.rb will route /users/sign_in and /users/sign_out to the right places:
 
 	devise_for(:users, :controllers => { :sessions => "sessions" })
+{:lang="ruby"}
 
 	$ rake routes
-	user_session			POST	/users/sign_in(.:format)	sessions#create
-	destroy_user_session	DELETE	/users/sign_out(.:format)	sessions#destroy
+	user_session			POST     /users/sign_in(.:format)   sessions#create
+	destroy_user_session	DELETE   /users/sign_out(.:format)  sessions#destroy
+{:lang="text"}
              
 Now you should be able to test the backend via curl or an app like [HTTPClient](http://ditchnet.org/httpclient/).  Here's a quick cheat sheet to test that everything's working properly.  This assumes you've already created a user on the backend.  Obviously, replace "localhost:3000" with your test URL.
 
@@ -121,6 +136,7 @@ Now you should be able to test the backend via curl or an app like [HTTPClient](
 
 	curl -x DELETE http://localhost:3000/users/sign_out&auth_token={token}
 	# should log out the user, changing the authentication token.
+{:lang="text"}
 
 All good?  Now we just have to set it up so the front end knows how to play this game.
 
@@ -133,50 +149,57 @@ The user model on the front end is just an ActiveResource model whose site point
 	class User < ActiveResource::Base
 		self.site = "http://localhost:3000"  # your backend URL here
 	end
+{:lang="ruby"}
 
 We have another custom Sessions Controller on the front end which is responsible for managing login and logout.  It sends the provided email and password to the backend and saves the returned token and user ID in the session cookie.
 
-	class SessionsController < ApplicationController
+~~~
+class SessionsController < ApplicationController
 
-  		def create
-    		# uses ActiveResource custom REST method
-    		# POST to @user.site/users/sign_in with params email/password and receive a token in return
-    		response = User.post(:sign_in, :email => params[:username], :password => params[:password])
-    		if response.code == "201"
-      			response_body = JSON.parse(response.body)
-      			session[:auth_token] = response_body["authentication_token"]
-      			session[:current_user_id] = response_body["user_id"]
-    		else
-      			# handle errors gracefully
-    		end
+	def create
+		# uses ActiveResource custom REST method
+		# POST to @user.site/users/sign_in with params email/password and receive a token in return
+		response = User.post(:sign_in, :email => params[:username], :password => params[:password])
+		if response.code == "201"
+			response_body = JSON.parse(response.body)
+			session[:auth_token] = response_body["authentication_token"]
+			session[:current_user_id] = response_body["user_id"]
+		else
+			# handle errors gracefully
+		end
 
-    		redirect_to root_url and return
-  		end
-
-  		def destroy
-    		# DELETE to @user.site/users/sign_out
-    		response = User.delete(:sign_out)
-    		# TODO might want to check response to make sure it worked..
-
-    		# clean up our session and instance variables
-    		session.delete(:auth_token)
-    		session.delete(:current_user_id)
-    		@current_user = nil
-
-    		redirect_to root_url and return
-  		end
+		redirect_to root_url and return
 	end
+
+	def destroy
+		# DELETE to @user.site/users/sign_out
+		response = User.delete(:sign_out)
+		# TODO might want to check response to make sure it worked..
+
+		# clean up our session and instance variables
+		session.delete(:auth_token)
+		session.delete(:current_user_id)
+		@current_user = nil
+
+		redirect_to root_url and return
+	end
+end
+~~~
+{:lang="ruby"}
 
 Oh, know what else would be nice?  A helper method to see if we’re logged in and get the current user, similar to the one Devise provides.  This goes in the Application controller:
 
-	helper_method :current_user
+~~~
+helper_method :current_user
 
-  	protected
-    def current_user
-      	@_current_user ||= session[:current_user_id] && User.find(session[:current_user_id])
-    end
-    
- So, cool, now you can refer to current_user from templates just like in Devise.
+	protected
+		def current_user
+			@_current_user ||= session[:current_user_id] && User.find(session[:current_user_id])
+		end
+~~~
+{:lang="ruby"}
+
+So, cool, now you can refer to current_user from templates just like in Devise.
  
 ## <a id='part3'>Part 3. The Fiddly Bits</a>
 There's only one piece missing: appending the stored authentication token to every backend API call.  I didn't expect this to be the hard part, but... now it gets complicated.
@@ -185,27 +208,31 @@ Basically, ActiveResource doesn’t support this use case.  You can set an extra
 
 	@user.auth_token = token
 	# the backend gets {:user => {:email => "me@example.com", ... :auth_token => token}}
+{:lang="ruby"}
 
 Some ActiveResource methods *do* support passing extra parameters, but you can't do it for every method, the format is inconsistent (and apparently undocumented), and we don't want to type all that out all the time anyway...
 
-	> User.delete(:sign_out, :auth_token => session[:auth_token])
-	# that works, but...
-	> g = Group.find(:first, :params => {:auth_token => session[:auth_token])
-	# hmm... that works too, but the format is different...
-	> g.name = "edited name"
-	> g.save!
-	ActiveResource::UnauthorizedAccess: Failed.  Response code = 401.  Response message = Unauthorized .
-	# whoops... what about...
-	> Group.site = "http://localhost:3030?auth_token=" . session[:auth_token]
-	> g.save!
-	ActiveResource::UnauthorizedAccess: Failed.  Response code = 401.  Response message = Unauthorized .
-	# OK, this is getting ugly...
-	> g.save!(:auth_token => "wh5xeZpwf6zHG9aHzy6M")
-  	ArgumentError: wrong number of arguments (1 for 0)
-	# fine then!
-	> g.put(g)
-	URI::InvalidURIError: bad URI(is not URI?): /groups/1/#<Group:0x007fe0d4998880>.json
-	#  (╯°□°）╯︵ ┻━┻) 
+~~~
+> User.delete(:sign_out, :auth_token => session[:auth_token])
+# that works, but...
+> g = Group.find(:first, :params => {:auth_token => session[:auth_token])
+# hmm... that works too, but the format is different...
+> g.name = "edited name"
+> g.save!
+ActiveResource::UnauthorizedAccess: Failed.  Response code = 401.  Response message = Unauthorized .
+# whoops... what about...
+> Group.site = "http://localhost:3030?auth_token=" . session[:auth_token]
+> g.save!
+ActiveResource::UnauthorizedAccess: Failed.  Response code = 401.  Response message = Unauthorized .
+# OK, this is getting ugly...
+> g.save!(:auth_token => "wh5xeZpwf6zHG9aHzy6M")
+ArgumentError: wrong number of arguments (1 for 0)
+# fine then!
+> g.put(g)
+URI::InvalidURIError: bad URI(is not URI?): /groups/1/#<Group:0x007fe0d4998880>.json
+#  (╯°□°）╯︵ ┻━┻) 
+~~~
+{:lang="ruby"}
 
 OK, look, forget it.  What we *really* want is a way to automatically send the authentication token, if we have it, with every single request -- in a way that works transparently with ActiveResource, so it won't matter if we're doing a find, update, or delete.
 
@@ -220,32 +247,37 @@ ActiveResource supports HTTP digest authentication: if you set a user and passwo
 First, add the following function to the "protected" section of the Application controller:
 
 	def set_auth_token
-    	User.user = session[:auth_token]
-    end
+	User.user = session[:auth_token]
+{:lang="ruby"}
 
 Then, add a filter near the top, so we call this function for every request:
+
 	before_filter :set_auth_token
+{:lang="ruby"}
 	
 If you examine the request sent to the backend, you'll see that it now contains a "HTTP-AUTHORIZATION" header.  So far, so good.
 
-Side note: If you have multiple ActiveResource models interacting with the backend, you will have to set the user on each one.   For example: "Group.user = session[:auth_token]".  The "user" (i.e., token) will then be sent for every Group request, such as Group.find, @group.save, etc.
+*Side note: If you have multiple ActiveResource models interacting with the backend, you will have to set the user on each one.   For example: "Group.user = session[:auth_token]".  The "user" (i.e., token) will then be sent for every Group request, such as Group.find, @group.save, etc.*
 
 Now ActiveResource is sending the auth_token in the header, but the backend is expecting to find it as a GET or POST parameter.  So we need a little hack on the backend to fish it out, thus allowing Devise to continue transparently handling authentication.
 
 To the backend code!
 
-	class ApplicationController < ActionController::Base
-  		prepend_before_filter :get_auth_token
+~~~
+class ApplicationController < ActionController::Base
+	prepend_before_filter :get_auth_token
 
-  		private
-  		def get_auth_token
-    		if auth_token = params[:auth_token].blank? && request.headers["HTTP_AUTHORIZATION"]
-      			# we're overloading ActiveResource's Basic HTTP authentication here, so we need to
-      			# do some unpacking of the auth token and re-save it as a parameter.
-      			params[:auth_token] = auth_token.split.last.unpack('m').first.chop
-    		end
-  		end
-	end
+	private
+		def get_auth_token
+			if auth_token = params[:auth_token].blank? && request.headers["HTTP_AUTHORIZATION"]
+				# we're overloading ActiveResource's Basic HTTP authentication here, so we need to
+				# do some unpacking of the auth token and re-save it as a parameter.
+				params[:auth_token] = auth_token.split.last.unpack('m').first.chop
+			end
+		end
+end
+~~~
+{:lang="ruby"}
 
 Yeah, ActiveResource is also encrypting that token, and then sending it in the HTTP digest format "user:password".  Since we didn't set the password and used our auth_token as the user string, we're looking at "encryptedtoken:" instead.
 
