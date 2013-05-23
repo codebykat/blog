@@ -4,7 +4,7 @@
   <title><![CDATA[codebykat.blog]]></title>
   <link href="http://blog.codebykat.com/atom.xml" rel="self"/>
   <link href="http://blog.codebykat.com/"/>
-  <updated>2013-05-20T13:17:22-07:00</updated>
+  <updated>2013-05-23T13:50:53-07:00</updated>
   <id>http://blog.codebykat.com/</id>
   <author>
     <name><![CDATA[kat]]></name>
@@ -12,6 +12,209 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Gorgeous Octopress Codeblocks with CodeRay]]></title>
+    <link href="http://blog.codebykat.com/2013/05/23/using-coderay-for-gorgeous-octopress-codeblocks/"/>
+    <updated>2013-05-23T09:00:00-07:00</updated>
+    <id>http://blog.codebykat.com/2013/05/23/using-coderay-for-gorgeous-octopress-codeblocks</id>
+    <content type="html"><![CDATA[<p>When I upgraded to Octopress 2.0, I was pretty excited about the <a href="http://octopress.org/blog/2011/07/23/octopress-20-surfaces/">syntax highlighting</a>.  I eagerly went back to some old posts and wrapped my code in {% codeblock %} tags.</p>
+
+<p>But… the default Octopress codeblock colors leave something to be desired.  In fact, if you have a lot of code on the page, it starts to feel a bit like being underwater.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">def</span> <span class="nf">test</span>
+</span><span class="line">  <span class="vi">@answer</span> <span class="o">=</span> <span class="mi">6</span><span class="o">*</span><span class="mi">9</span>
+</span><span class="line">  <span class="k">if</span> <span class="vi">@answer</span> <span class="o">!=</span> <span class="mi">42</span>  <span class="c1"># this should never happen</span>
+</span><span class="line">    <span class="k">raise</span> <span class="s2">&quot;Oh no, not again.&quot;</span>
+</span><span class="line">  <span class="k">else</span>
+</span><span class="line">    <span class="nb">print</span> <span class="s2">&quot;Don&#39;t panic.&quot;</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>I wanted codeblocks that looked more like GitHub’s: lighter colors, softer edges, slightly less… well, blue.  So I started poking around, and here’s what I wound up with:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"> <div class="CodeRay">
+  <div class="code"><pre>
+<span class="keyword">def</span> <span class="function">test</span>
+  <span class="instance-variable">@answer</span> = <span class="integer">6</span>*<span class="integer">9</span>
+  <span class="keyword">if</span> <span class="instance-variable">@answer</span> != <span class="integer">42</span>  <span class="comment"># this should never happen</span>
+    raise <span class="string"><span class="delimiter">&quot;</span><span class="content">Oh no, not again.</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
+    print <span class="string"><span class="delimiter">&quot;</span><span class="content">Don't panic.</span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span>
+</pre></div>
+</div>
+ </figure></notextile></div>
+
+<p>Ahhhhhhh.  Don’t your eyeballs feel much happier now?  Read on to find out how it works!</p>
+
+<!--more-->
+
+<h2 id="add-coderay-to-your-project">1. Add CodeRay to your project</h2>
+
+<p>By default, Octopress uses a Markdown processor called RDiscount, which defaults to <a href="http://pygments.org/">Pygments</a> for code highlighting.  Pygments doesn’t seem to have too many options, but it turns out if we switch to <a href="http://kramdown.rubyforge.org/">kramdown</a> for Markdown processing, we can swap Pygments out for a highlighter called <a href="http://coderay.rubychan.de/">CodeRay</a>.  CodeRay allows for much more customization.</p>
+
+<p>The best resource I found is <a href="http://blog.alestanis.com/2013/02/04/octopress-and-the-twilight-color-scheme/">this excellent tutorial</a> on changing Octopress codeblocks over to a “Twilight” color scheme, à la Sublime Text.</p>
+
+<p>Add kramdown and coderay to your Gemfile, and set the config options:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header" style="margin-bottom:-5px;"><span>Gemfile</span><a href="https://github.com/codebykat/blog/commit/23a74f1d96f0f592dab34c5003afefc99c75e026">link</a></figcaption> <div class="CodeRay">
+  <div class="code"><pre>
+  gem <span class="string"><span class="delimiter">'</span><span class="content">kramdown</span><span class="delimiter">'</span></span>
+  gem <span class="string"><span class="delimiter">'</span><span class="content">coderay</span><span class="delimiter">'</span></span>
+</pre></div>
+</div>
+ </figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header" style="margin-bottom:-5px;"><span>_config.yml</span><a href="https://github.com/codebykat/blog/commit/23a74f1d96f0f592dab34c5003afefc99c75e026">link</a></figcaption> <div class="CodeRay">
+  <div class="code"><pre>
+<span class="key">markdown</span>: kramdown
+<span class="key">kramdown</span>:
+  <span class="key">use_coderay</span>: <span class="predefined-constant">true</span>
+  <span class="key">coderay</span>:
+    <span class="key">coderay_line_numbers</span>: <span class="predefined-constant">nil</span>
+    <span class="key">coderay_css</span>: <span class="keyword">class</span>
+</pre></div>
+</div>
+ </figure></notextile></div>
+
+<p>CodeRay has two options:</p>
+
+<ul>
+  <li><strong>coderay_line_numbers</strong>: can be nil (no line numbers), inline, list, or table.</li>
+  <li><strong>coderay_css</strong>: can be “style” or “class”.  “Style” embeds the syntax highlighting in styles for each outputted element.  “Class” just gives them appropriate classes (e.g. “variable”, “comment”) and lets you style them yourself.  If you want to do any customization, you probably want to set this to “class”.</li>
+</ul>
+
+<p>Now if you <code>bundle install</code>, you will have CodeRay.  But… it won’t do much of anything yet.</p>
+
+<h2 id="styling">2. Styling</h2>
+
+<p>Here’s the first “gotcha” with CodeRay: its syntax highlighting sets the proper classes on things, but it doesn’t come with a stylesheet to actually style those elements.  If you request “class” styling, you’re on your own.</p>
+
+<p>If you want to use its default styles as a starting point (or you want to start from scratch and need to know which classes you’ll get), check out <a href="https://github.com/rubychan/coderay/blob/master/lib/coderay/styles/alpha.rb">alpha.rb in the CodeRay source</a>.  I also found a couple of custom themes for CodeRay, including the <a href="https://gist.github.com/iq9/2906599">Twilight one</a> mentioned in the tutorial post.</p>
+
+<p>I eventually settled on <a href="http://www.andrewthorp.com/posts/github-theme-for-coderay">this one</a>, a GitHub imitation theme.</p>
+
+<p>Find one you like, and save it in sass/custom with an underscore in front of the filename and a .scss extension, so you can import it in _styles.scss.  (The underscore tells sass not to compile it to css.)  I named mine _coderay-github.scss.</p>
+
+<p>I also had to override a few Octopress styles that were still messing things up.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header" style="margin-bottom:-5px;"><span>sass/custom/_styles.scss</span><a href="https://github.com/codebykat/blog/commit/23a74f1d96f0f592dab34c5003afefc99c75e026">link</a></figcaption> <div class="CodeRay">
+  <div class="code"><pre>
+<span class="comment">/* overrides of the lousy styles from _syntax.scss */</span>
+<span class="class">.CodeRay</span> <span class="type">pre</span> {
+  <span class="key">background</span>: <span class="value">none</span>;
+  <span class="key">color</span>: <span class="color">#000</span>;
+}
+
+<span class="comment">/* fixes issue where the whole line wouldn't get colored in a diff */</span>
+<span class="class">.CodeRay</span> <span class="type">span</span><span class="class">.insert</span>, <span class="class">.CodeRay</span> <span class="type">span</span><span class="class">.change</span>, <span class="class">.CodeRay</span> <span class="type">span</span><span class="class">.delete</span> {
+        <span class="key">width</span>: <span class="value">auto</span>;
+}
+
+<span class="directive">@import</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">coderay-github</span><span class="delimiter">&quot;</span></span>
+</pre></div>
+</div>
+ </figure></notextile></div>
+
+<p>And finally, I commented out a couple lines in _syntax.scss, because invisible scrollbars are… not good.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header" style="margin-bottom:-5px;"><span>sass/partials/_syntax.scss</span><a href="https://github.com/codebykat/blog/commit/23a74f1d96f0f592dab34c5003afefc99c75e026">link</a></figcaption> <div class="CodeRay">
+  <div class="code"><pre>
+<span class="line change"><span class="change">@@</span> -208,11 +208,11 <span class="change">@@</span></span>
+
+<span class="line delete"><span class="delete">-</span>pre, .highlight, .gist-highlight {</span>
+<span class="line insert"><span class="insert">+</span><span class="eyecatcher">/*</span>pre, .highlight, .gist-highlight {</span>
+   &amp;::-webkit-scrollbar {  height: .5em; background: $solar-scroll-bg; }
+   &amp;::-webkit-scrollbar-thumb:horizontal { background: $solar-scroll-thumb;  -webkit-border-radius: 4px; border-radius: 4px }
+ }
+<span class="line delete"><span class="delete">-</span></span>
+<span class="line insert"><span class="insert">+</span><span class="eyecatcher">*/</span></span>
+ .highlight code { 
+</pre></div>
+</div>
+ </figure></notextile></div>
+
+<p>I’d really rather override the styles than modify _syntax.scss, but I couldn’t figure out how to accomplish that in a way that got the default scrollbar back, so that’s what we’re stuck with right now.  (If you figure out how to do this, please let me know!  It seems to me that a lot of the -webkit-scrollbar pseudoclasses don’t actually work the way they should.)</p>
+
+<h2 id="using-coderay">3. Using CodeRay</h2>
+
+<p>If all has gone well, you should now be able to prettify your code with CodeRay.  Hooray!  But unfortunately, kramdown isn’t a drop-in replacement for RDiscount.  You’ll have to change a few things in older posts.</p>
+
+<p><a href="http://kramdown.rubyforge.org/syntax.html#code-blocks">kramdown syntax</a> supports two styles of codeblock: fenced and indented.  It does <strong>not</strong> support the triple-backtick style (as seen in GitHub Flavored Markdown).</p>
+
+<p>You also need to specify the language for syntax highlighting, which is done by passing a “lang” argument after the codeblock.  Thus:</p>
+
+<p><strong>Fenced</strong>:</p>
+
+<div><div class="CodeRay">
+  <div class="code"><pre>~~~
+<span class="keyword">def</span> <span class="function">hello</span>
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">hello world</span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span>
+~~~
+{<span class="symbol">:lang=</span><span class="string"><span class="delimiter">&quot;</span><span class="content">ruby</span><span class="delimiter">&quot;</span></span>}
+</pre></div>
+</div>
+</div>
+
+<p><strong>Indented</strong>:</p>
+
+<div><div class="CodeRay">
+  <div class="code"><pre>    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">hello world</span><span class="delimiter">&quot;</span></span>
+{<span class="symbol">:lang=</span><span class="string"><span class="delimiter">&quot;</span><span class="content">ruby</span><span class="delimiter">&quot;</span></span>}
+</pre></div>
+</div>
+</div>
+
+<p>You can embed inline code using a single backtick, which is invoked like this: <code>`print 'hello'`{:lang="ruby"}</code> and looks like this: <code><span class="CodeRay">print <span class="string"><span class="delimiter">'</span><span class="content">hello</span><span class="delimiter">'</span></span></span></code></p>
+
+<h3 id="some-gotchas">Some gotchas:</h3>
+
+<ul>
+  <li>CodeRay doesn’t support all the same languages as RDiscount (shell, for one, is noticeably missing).  There’s a list of supported languages on <a href="http://coderay.rubychan.de/">the homepage</a>.</li>
+  <li>The codeblock Liquid tag will still work, but will invoke the default (Pygments) syntax highlighting.</li>
+  <li>The opening fence can be as many tildes as you want (at least three); the closing fence needs to have at least as many as the opening fence did.</li>
+  <li>Make sure to leave a blank line above any blocks and put the language declaration on its own line.</li>
+  <li>The language declaration has <a href="https://github.com/gettalong/kramdown/pull/15">apparently changed</a> to <code>{:.language-ruby}</code> in kramdown 0.14, and you will additionally be able to specify the language after the first fence.  Neither of these is working for me on kramdown 0.13.</li>
+</ul>
+
+<h2 id="bonus-round-captions">4. Bonus Round: Captions!</h2>
+
+<p>So, this is all pretty cool, but the one thing I really missed from the default codeblocks was the neat captions with optional links.  At first I tried putting them in manually, and then realized that was silly, and I should just write a plugin based on the default code_block.rb plugin.</p>
+
+<p>A bit of hacking later, and <a href="https://github.com/codebykat/blog/blob/2f6c9615c02869dca5f52921ac5eb7e0b35a6427/plugins/code_ray_block.rb">voilà</a>.  A plugin that uses the same pretty captions as the default codeblocks, but runs it through CodeRay for syntax highlighting.</p>
+
+<p>Place this in your plugins directory, and you can use a {% coderay %} tag with the same syntax as the default {% codeblock %}.</p>
+
+<p>I adjusted the margin of the caption in an inline style to scoot the codeblock up a little bit – this cuts off the rounded edges at the top, so the code section looks attached to the caption.</p>
+
+<p>It also helps to set the border colors of the codeblocks to match the captions:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption class="code-header" style="margin-bottom:-5px;"><span>sass/custom/_styles.scss</span><a href="https://github.com/codebykat/blog/commit/23a74f1d96f0f592dab34c5003afefc99c75e026">link</a></figcaption> <div class="CodeRay">
+  <div class="code"><pre>
+<span class="class">.CodeRay</span> <span class="type">pre</span>, <span class="type">p</span> <span class="type">code</span>, <span class="type">li</span> <span class="type">code</span> {
+  <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="color">#565656</span>;
+  <span class="key">border-top-color</span>: <span class="color">#cbcbcb</span>;
+  <span class="key">border-left-color</span>: <span class="color">#a5a5a5</span>;
+  <span class="key">border-right-color</span>: <span class="color">#a5a5a5</span>;
+}
+</pre></div>
+</div>
+ </figure></notextile></div>
+
+<p>There!  Gorgeous, highlighted, captioned codeblocks.  Aren’t they lovely?</p>
+
+<p>The full changeset is <a href="https://github.com/codebykat/blog/commit/23a74f1d96f0f592dab34c5003afefc99c75e026">here</a> and the plugin is <a href="https://github.com/codebykat/blog/commit/2f6c9615c02869dca5f52921ac5eb7e0b35a6427">here</a>.  Comments and pull requests welcome!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Three Octopress Tweaks]]></title>

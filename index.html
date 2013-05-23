@@ -9,7 +9,7 @@
   <meta name="author" content="kat">
 
   
-  <meta name="description" content="I’ve just updated Octopress to the latest and greatest version, including re-applying my various customizations. So, now that I happen to have them &hellip;">
+  <meta name="description" content="When I upgraded to Octopress 2.0, I was pretty excited about the syntax highlighting. I eagerly went back to some old posts and wrapped my code in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,82 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2013/05/23/using-coderay-for-gorgeous-octopress-codeblocks/">Gorgeous Octopress Codeblocks with CodeRay</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-23T09:00:00-07:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When I upgraded to Octopress 2.0, I was pretty excited about the <a href="http://octopress.org/blog/2011/07/23/octopress-20-surfaces/">syntax highlighting</a>.  I eagerly went back to some old posts and wrapped my code in {% codeblock %} tags.</p>
+
+<p>But… the default Octopress codeblock colors leave something to be desired.  In fact, if you have a lot of code on the page, it starts to feel a bit like being underwater.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">def</span> <span class="nf">test</span>
+</span><span class="line">  <span class="vi">@answer</span> <span class="o">=</span> <span class="mi">6</span><span class="o">*</span><span class="mi">9</span>
+</span><span class="line">  <span class="k">if</span> <span class="vi">@answer</span> <span class="o">!=</span> <span class="mi">42</span>  <span class="c1"># this should never happen</span>
+</span><span class="line">    <span class="k">raise</span> <span class="s2">&quot;Oh no, not again.&quot;</span>
+</span><span class="line">  <span class="k">else</span>
+</span><span class="line">    <span class="nb">print</span> <span class="s2">&quot;Don&#39;t panic.&quot;</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>I wanted codeblocks that looked more like GitHub’s: lighter colors, softer edges, slightly less… well, blue.  So I started poking around, and here’s what I wound up with:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"> <div class="CodeRay">
+  <div class="code"><pre>
+<span class="keyword">def</span> <span class="function">test</span>
+  <span class="instance-variable">@answer</span> = <span class="integer">6</span>*<span class="integer">9</span>
+  <span class="keyword">if</span> <span class="instance-variable">@answer</span> != <span class="integer">42</span>  <span class="comment"># this should never happen</span>
+    raise <span class="string"><span class="delimiter">&quot;</span><span class="content">Oh no, not again.</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">else</span>
+    print <span class="string"><span class="delimiter">&quot;</span><span class="content">Don't panic.</span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span>
+</pre></div>
+</div>
+ </figure></notextile></div>
+
+<p>Ahhhhhhh.  Don’t your eyeballs feel much happier now?  Read on to find out how it works!</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2013/05/23/using-coderay-for-gorgeous-octopress-codeblocks/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -263,6 +339,10 @@ of the Ruby community, the experience was nothing but positive.</p>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2013/05/23/using-coderay-for-gorgeous-octopress-codeblocks/">Gorgeous Octopress Codeblocks with CodeRay</a>
+      </li>
     
       <li class="post">
         <a href="/2013/05/20/three-octopress-tweaks/">Three Octopress Tweaks</a>
