@@ -3,7 +3,7 @@ layout: post
 title: "Gorgeous Octopress Codeblocks with CodeRay"
 date: 2013-05-23 09:00
 comments: true
-categories: [octopress, coderay]
+categories: [octopress, coderay, walkthroughs, jekyll, code]
 ---
 
 When I upgraded to Octopress 2.0, I was pretty excited about the [syntax highlighting](http://octopress.org/blog/2011/07/23/octopress-20-surfaces/).  I eagerly went back to some old posts and wrapped my code in {% raw %}{% codeblock %}{% endraw %} tags.
@@ -44,12 +44,12 @@ The best resource I found is [this excellent tutorial](http://blog.alestanis.com
 
 Add kramdown and coderay to your Gemfile, and set the config options:
 
-{% coderay Gemfile lang:ruby %}
+{% coderay Gemfile lang:ruby https://github.com/codebykat/blog/commit/23a74f1d96f0f592dab34c5003afefc99c75e026 %}
   gem 'kramdown'
   gem 'coderay'
 {% endcoderay %}
 
-{% coderay _config.yml lang:ruby %}
+{% coderay _config.yml lang:ruby https://github.com/codebykat/blog/commit/23a74f1d96f0f592dab34c5003afefc99c75e026 %}
 markdown: kramdown
 kramdown:
   use_coderay: true
@@ -77,7 +77,7 @@ Find one you like, and save it in sass/custom with an underscore in front of the
 
 I also had to override a few Octopress styles that were still messing things up.
 
-{% coderay sass/custom/_styles.scss lang:css %}
+{% coderay sass/custom/_styles.scss lang:css https://github.com/codebykat/blog/commit/23a74f1d96f0f592dab34c5003afefc99c75e026 %}
 /* overrides of the lousy styles from _syntax.scss */
 .CodeRay pre {
   background: none;
@@ -90,10 +90,10 @@ I also had to override a few Octopress styles that were still messing things up.
 }
 
 @import "coderay-github"
-{% endcoderay %}
+{% endcoderay https://github.com/codebykat/blog/commit/23a74f1d96f0f592dab34c5003afefc99c75e026 %}
 
 And finally, I commented out a couple lines in _syntax.scss, because invisible scrollbars are... not good.
-{% coderay sass/partials/_syntax.scss lang:diff %}
+{% coderay sass/partials/_syntax.scss lang:diff https://github.com/codebykat/blog/commit/23a74f1d96f0f592dab34c5003afefc99c75e026 %}
 @@ -208,11 +208,11 @@
 
 -pre, .highlight, .gist-highlight {
@@ -110,7 +110,9 @@ I'd really rather override the styles than modify _syntax.scss, but I couldn't f
  
 ## 3. Using CodeRay
 
-If all has gone well, you should now be able to prettify your code with CodeRay.  Hooray!  [kramdown syntax](http://kramdown.rubyforge.org/syntax.html#code-blocks) supports two styles of codeblock: fenced and indented.
+If all has gone well, you should now be able to prettify your code with CodeRay.  Hooray!  But unfortunately, kramdown isn't a drop-in replacement for RDiscount.  You'll have to change a few things in older posts.
+
+[kramdown syntax](http://kramdown.rubyforge.org/syntax.html#code-blocks) supports two styles of codeblock: fenced and indented.  It does **not** support the triple-backtick style (as seen in GitHub Flavored Markdown).
 
 You also need to specify the language for syntax highlighting, which is done by passing a "lang" argument after the codeblock.  Thus:
 
@@ -135,30 +137,29 @@ end
 ~~~~~
 {:lang="ruby"}
 
-You can also embed inline code using a single backtick, which is invoked like this: <code>`print 'hello'`{:lang="ruby"}</code> and looks like this: `print 'hello'`{:lang="ruby"}
+You can embed inline code using a single backtick, which is invoked like this: <code>`print 'hello'`{:lang="ruby"}</code> and looks like this: `print 'hello'`{:lang="ruby"}
 
 ### Some gotchas:
 
 * CodeRay doesn't support all the same languages as RDiscount (shell, for one, is noticeably missing).  There's a list of supported languages on [the homepage](http://coderay.rubychan.de/).
 * The codeblock Liquid tag will still work, but will invoke the default (Pygments) syntax highlighting.
-* The backtick syntax for codeblocks (as seen in GitHub Flavored Markdown) is not supported by kramdown.
-* For fenced, the number of tildes in the opening fence is arbitrary, but the closing fence needs to have "at least as many".
+* The opening fence can be as many tildes as you want (at least three); the closing fence needs to have at least as many as the opening fence did.
 * Make sure to leave a blank line above any blocks and put the language declaration on its own line.
 * The language declaration has [apparently changed](https://github.com/gettalong/kramdown/pull/15) to `{:.language-ruby}` in kramdown 0.14, and you will additionally be able to specify the language after the first fence.  Neither of these is working for me on kramdown 0.13.
 
 ## 4. Bonus Round: Captions!
 
-So, this is all pretty cool, but the one thing I really missed from the default codeblocks was the neat captions with optional links.  At first I tried putting them in manually, and then realized that was silly, and I should just write a plugin based on the default code_block.rb plugin that uses CodeRay for its syntax highlighting.
+So, this is all pretty cool, but the one thing I really missed from the default codeblocks was the neat captions with optional links.  At first I tried putting them in manually, and then realized that was silly, and I should just write a plugin based on the default code_block.rb plugin.
 
-A bit of hacking later, and voilà:
+A bit of hacking later, and [voilà](https://github.com/codebykat/blog/blob/2f6c9615c02869dca5f52921ac5eb7e0b35a6427/plugins/code_ray_block.rb).  A plugin that uses the same pretty captions as the default codeblocks, but runs it through CodeRay for syntax highlighting.
 
 Place this in your plugins directory, and you can use a {% raw %}{% coderay %}{% endraw %} tag with the same syntax as the default {% raw %}{% codeblock %}{% endraw %}.
 
-I adjusted the margin of the caption in an inline style to scoot the codeblock up a little bit -- this cuts off the rounded edges at the top, which look awkward otherwise.
+I adjusted the margin of the caption in an inline style to scoot the codeblock up a little bit -- this cuts off the rounded edges at the top, so the code section looks attached to the caption.
 
 It also helps to set the border colors of the codeblocks to match the captions:
 
-{% coderay sass/custom/_styles.scss lang:css %}
+{% coderay sass/custom/_styles.scss lang:css https://github.com/codebykat/blog/commit/23a74f1d96f0f592dab34c5003afefc99c75e026 %}
 .CodeRay pre, p code, li code {
   border: 1px solid #565656;
   border-top-color: #cbcbcb;
@@ -168,3 +169,5 @@ It also helps to set the border colors of the codeblocks to match the captions:
 {% endcoderay %}
 
 There!  Gorgeous, highlighted, captioned codeblocks.  Aren't they lovely?
+
+The full changeset is [here](https://github.com/codebykat/blog/commit/23a74f1d96f0f592dab34c5003afefc99c75e026) and the plugin is [here](https://github.com/codebykat/blog/commit/2f6c9615c02869dca5f52921ac5eb7e0b35a6427).  Comments and pull requests welcome!
