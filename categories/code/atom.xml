@@ -4,7 +4,7 @@
   <title><![CDATA[Category: code | codebykat.blog]]></title>
   <link href="http://blog.codebykat.com/categories/code/atom.xml" rel="self"/>
   <link href="http://blog.codebykat.com/"/>
-  <updated>2013-05-23T13:50:53-07:00</updated>
+  <updated>2013-05-23T13:52:12-07:00</updated>
   <id>http://blog.codebykat.com/</id>
   <author>
     <name><![CDATA[kat]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Gorgeous Octopress Codeblocks with CodeRay]]></title>
-    <link href="http://blog.codebykat.com/2013/05/23/using-coderay-for-gorgeous-octopress-codeblocks/"/>
+    <link href="http://blog.codebykat.com/2013/05/23/gorgeous-octopress-codeblocks-with-coderay/"/>
     <updated>2013-05-23T09:00:00-07:00</updated>
-    <id>http://blog.codebykat.com/2013/05/23/using-coderay-for-gorgeous-octopress-codeblocks</id>
+    <id>http://blog.codebykat.com/2013/05/23/gorgeous-octopress-codeblocks-with-coderay</id>
     <content type="html"><![CDATA[<p>When I upgraded to Octopress 2.0, I was pretty excited about the <a href="http://octopress.org/blog/2011/07/23/octopress-20-surfaces/">syntax highlighting</a>.  I eagerly went back to some old posts and wrapped my code in {% codeblock %} tags.</p>
 
 <p>But… the default Octopress codeblock colors leave something to be desired.  In fact, if you have a lot of code on the page, it starts to feel a bit like being underwater.</p>
