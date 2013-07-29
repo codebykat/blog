@@ -57,9 +57,14 @@ module Jekyll
       @caption = nil
       @filetype = nil
       @highlight = true
+      @linenum = nil
       if markup =~ /\s*lang:(\S+)/i
         @filetype = $1
         markup = markup.sub(/\s*lang:(\S+)/i,'')
+      end
+      if markup =~ /\s*line:(\S+)/i
+        @linenum = $1.to_sym
+        markup = markup.sub(/\s*line:(\S+)/i,'')
       end
       if markup =~ CaptionUrlTitle
         @file = $1
@@ -76,14 +81,14 @@ module Jekyll
 
     def render(context)
       output = super
-      code = super
+      code = super.strip
       source = "<figure class='code'>"
       source += @caption if @caption
       coderay_css = context.registers[:site].config['kramdown']['coderay']['coderay_css'].to_sym
       if @filetype
-        source += " #{CodeRay.scan(code, @filetype).div(:css=>coderay_css)} </figure>"
+        source += " #{CodeRay.scan(code, @filetype).div(:css=>coderay_css, :line_numbers => @linenum)} </figure>"
       else
-        source += " #{CodeRay.scan(code, :text).div(:css=>coderay_css)} </figure>"
+        source += " #{CodeRay.scan(code, :text).div(:css=>coderay_css, :line_numbers => @linenum)} </figure>"
       end
       source = safe_wrap(source)
       source = context['pygments_prefix'] + source if context['pygments_prefix']
